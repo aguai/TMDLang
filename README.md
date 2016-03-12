@@ -1,2 +1,2 @@
-# TXLang
-Timebase eXtandable Markup Language
+# XDLang
+eXtandable MarDown Language
