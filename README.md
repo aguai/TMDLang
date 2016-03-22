@@ -1,2 +1,2 @@
 # XDLang
-eXtensible markdown Language
+eXtensible markDown Language
