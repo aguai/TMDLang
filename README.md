@@ -1,2 +1,2 @@
-# XDLang
-eXtensible markDown Language
+# TMDLang
+Timebase Mar kDown Language
