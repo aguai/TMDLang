@@ -1,2 +1,2 @@
 # TMDLang
-Timebase MarkDown Language
+Timebase Mark Down Language
