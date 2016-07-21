@@ -1,16 +1,13 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+# Byte - compiled / optimized / DLL files
+__pycache__/ * .py[cod] * $py.class
 
-# C extensions
-*.so
+# C extensions * .so
 
 # Distribution / packaging
 .Python
 env/
 build/
-develop-eggs/
+develop - eggs/
 dist/
 downloads/
 eggs/
@@ -19,38 +16,30 @@ lib/
 lib64/
 parts/
 sdist/
-var/
-*.egg-info/
-.installed.cfg
-*.egg
+var/ * .egg - info/
+.installed.cfg * .egg
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
+#  before PyInstaller builds the exe, so as to inject date/other infos into it. * .manifest * .spec
 
 # Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
+pip - log.txt
+pip - delete - this - directory.txt
 
 # Unit test / coverage reports
 htmlcov/
 .tox/
 .coverage
-.coverage.*
+.coverage. * 
 .cache
 nosetests.xml
-coverage.xml
-*,cover
+coverage.xml * , cover
 .hypothesis/
 
-# Translations
-*.mo
-*.pot
+# Translations * .mo * .pot
 
-# Django stuff:
-*.log
+# Django stuff: * .log
 
 # Sphinx documentation
 docs/_build/
@@ -64,5 +53,11 @@ target/
 #VSCode Temp
 .vscode/
 
-#try all feature...>///<
+#try all feature... >///<
 try/
+
+# ignore .gitignore 
+.gitignore 
+
+# ignore .idea
+.idea/
