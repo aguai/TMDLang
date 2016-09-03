@@ -61,3 +61,7 @@ try/
 
 # ignore .idea
 .idea/
+
+#test
+test/
+test/*
