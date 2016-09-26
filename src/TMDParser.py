@@ -1,4 +1,3 @@
-import re
 PartContentRegex = '(?P<partname>\\S+?):(?P<InstrumentName>\\S+?)@(\\||\\[)(?P<Timing>\\S+?)(\\||\\])\\{(\\s+?)(?P<PartContent>[^}]+)\\}'
 SongNameRegex = '\\s*\\*\\*\\s+?(?P<SongName>[^\\*]+)\\s+?\\*\\*\\s*'
 InstrumentSet=set()
