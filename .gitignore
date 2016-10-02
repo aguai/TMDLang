@@ -6,6 +6,7 @@ __pycache__/ * .py[cod] * $py.class
 # Distribution / packaging
 .Python
 env/
+venv/
 build/
 develop - eggs/
 dist/
@@ -53,7 +54,7 @@ target/
 #VSCode Temp
 .vscode/
 
-#try all feature... >///<
+# try all feature... >///<
 try/
 
 # ignore .gitignore 
@@ -62,6 +63,9 @@ try/
 # ignore .idea
 .idea/
 
-#test
+# test
 test/
 test/*
+
+# ReBuildStuff
+ReBuildCario/*
