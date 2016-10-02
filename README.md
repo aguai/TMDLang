@@ -18,6 +18,8 @@ a markup language for sequent event like **band style music score** or **show ru
     ```
     ./configure --enable-quartz=no --enable-quartz-font=no --enable-quartz-image=no
     ```
+
+
 ### for macOS(中文)
 
 1. 請自行安裝 [FreeSerif](http://ftp.gnu.org/gnu/freefont/freefont-ttf-20120503.zip) 及 [花園明朝](http://fonts.jp/hanazono/) 兩組字體以俾顯示 🎝 , 𝆒 , 𝄋, 𝄌 等字體。
