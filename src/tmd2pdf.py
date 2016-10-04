@@ -1,7 +1,6 @@
-#!/usr/local/bin/python
 # -*- coding: utf8 -*-
 
-import TMDParser
+import TMDScanner
 import re
 import sys
 def main():
