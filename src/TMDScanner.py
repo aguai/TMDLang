@@ -29,6 +29,7 @@ def PartContentGetter(inputFile):
         InstrumentSet.add(ReturnList[1])
         PartSet.add(ReturnList[0])
     return ReturnList
+
 def PartSequenceGetter(inputFile):
     PartNameList = re.findall(PartSequencePattern, inputFile)[0].split('->')[1:-1]
     for nameStrIndex in range(len(PartNameList)):
