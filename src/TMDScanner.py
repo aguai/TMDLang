@@ -11,6 +11,9 @@ PartSet             = set()
 
 
 def CommitStripper(str):
+    '''
+    remove commits
+    '''
     return re.sub(r'#.+(\n|\r|\r\n|\n\r|$)', '',str)
 
 def FormaterStripper(str):
@@ -18,6 +21,9 @@ def FormaterStripper(str):
     return str.replace(' ', '').replace('\n', '').replace('|', '').replace('\t', '').replace('\r', '')
 
 def PartContentGetter(inputFile):
+    '''
+    to collect all the part content and instrument content
+    '''
     TempList=[]
     ReturnList=[]
     for Match in re.findall(PartContentPattern, inputFile):
@@ -25,9 +31,9 @@ def PartContentGetter(inputFile):
     for everyMatch in TempList:
         everyMatch[3]=CommitStripper(FormaterStripper(everyMatch[3]))
     for Item in TempList:
-        ReturnList.append(tuple(Item ))
-        InstrumentSet.add(ReturnList[1])
-        PartSet.add(ReturnList[0])
+        ReturnList.append(tuple(Item ))     # the list change into tuple (so that immutable) contains all the part content 
+        InstrumentSet.add(ReturnList[1])    # these two sets includes all the instruments and part name
+        PartSet.add(ReturnList[0])          #
     return ReturnList
 
 def PartSequenceGetter(inputFile):
