@@ -1,5 +1,6 @@
 # -*- coding: utf8 -*-
 import re
+########################## Pass 1 ###################################################
 MarkupTypePattern   = r"^\:\:(?P<MarkType>\S+)\:\:\s*?$"
 PartSequencePattern = r"\-\>[^\#]+\#"
 ChordContentPattern = r"\<\s?(?P<TickBase>\d\d?)\s?\*\>(?P<ChordString>[^$\<]+)"
@@ -51,3 +52,6 @@ def PartSequenceGetter(inputFile):
         PartNameList[nameStrIndex] = FormaterStripper(PartNameList[nameStrIndex])
     return tuple(PartNameList)
 
+########################## Pass 2 ###################################################
+RawNoteSeqPattern   = r"\<(?P<Base>[0-7][0-7]?)\*\>(?P<NoteSeq>[^<$]+)"
+NoteEventPattern    = r"(?P<NoteEvent>[0-7]['|,]?[\^|_]?[\^|_]?\-*)"
