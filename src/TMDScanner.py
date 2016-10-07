@@ -52,8 +52,10 @@ def PartSequenceGetter(inputFile):
     return tuple(PartNameList)
 
 ########################## Pass 2 ###################################################
-RawNoteSeqPattern   = r"\<(?P<Base>[0-7][0-7]?)\*\>(?P<NoteSeq>[^<$]+)"
-NoteEventPattern    = r"(?P<NoteEvent>[0-7]['|,]?[\^|_]?[\^|_]?\-*)"
+RawNoteSeqPattern       = r"\<(?P<Base>[0-7][0-7]?)\*\>(?P<NoteSeq>[^<$]+)"
+NoteEventPattern        = r"(?P<NoteEvent>[0-7]['|,]?[\^|_]?[\^|_]?\-*)"
+CHORDPartStringPattern  = r"\<(?P<Base>[12348][26]?)\*\>(?P<ChordString>[^<$]+)"
+CHORDStringPattern      = r"\[(?P<Chord>[1-7][^\]]*)\]\-*"
 
 def ChordINPart(ChordString):
-    
+    pass
