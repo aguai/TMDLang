@@ -29,12 +29,12 @@ def main():
     InputFile = open(ARGV[1], 'r').read()
 ########################### For DEBUG ##############################
     print("collectting notation info from %s... " % ARGV[1])  
-    TMDScanner.Key          =        TMDScanner.KeyGetter(InputFile)
-    TMDScanner.Tempo        = float( TMDScanner.TempoGetter(InputFile) )
-    TMDScanner.SongName     =        TMDScanner.SongNameGetter(InputFile)
-    print('#########################')
-    for i in TMDScanner.PartContentGetter(InputFile):
-        print(i)
+    TMDScanner.Key              =        TMDScanner.KeyGetter(InputFile)
+    TMDScanner.Tempo            = float( TMDScanner.TempoGetter(InputFile) )
+    TMDScanner.SongName         =        TMDScanner.SongNameGetter(InputFile)
+    TMDScanner.PartsContent     =        TMDScanner.PartContentGetter(InputFile)
+    print('The Contents is \n' + str(TMDScanner.AllPartsContent))
+        
     print('#########################')
 
     print('KEY\t=\t'        +     TMDScanner.Key)

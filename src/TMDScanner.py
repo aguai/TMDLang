@@ -13,6 +13,7 @@ PartSet             = set()
 Key                 = 'C'       # default key is C
 Tempo               = 120.0     # default tempo 120
 SongName            = ''        # defult no name
+PartsContent        = []
 
 def CommitStripper(str):
     '''
@@ -32,6 +33,7 @@ def KeyGetter(inputFile):
 def SongNameGetter(inputFile):
     return re.findall(SongNamePattern, inputFile)[0]
 
+
 def PartContentGetter(inputFile):
     '''
     to collect all the part content and instrument content
@@ -39,12 +41,22 @@ def PartContentGetter(inputFile):
     PartContentList=[]
     for Match in re.findall(PartContentPattern, inputFile):
         Match = list(Match)
-        Match[3]=CommitStripper(FormaterStripper(Match[3]))
-        InstrumentSet.add(Match[1])
-        PartSet.add(Match[0])
+        Match[3]=CommitStripper(FormaterStripper(Match[3]))       
         PartContentList.append(Match)
     return PartContentList
 
+def PartSetGetter(PartContentList):
+    TempSet=set()
+    for Match in PartContentList:
+        TempSet.add(Match[0])
+    return TempSet
+
+def InstrumentSetGetter(PartContentList):
+    TempSet=set()
+    for Match in PartContentList:
+        TempSet.add(Match[1])
+    return TempSet
+    
 def PartSequenceGetter(inputFile):
     PartNameList = re.findall(PartSequencePattern, inputFile)[0].split('->')[1:-1]
     for nameStrIndex in range(len(PartNameList)):
@@ -57,5 +69,6 @@ NoteEventPattern        = r"(?P<NoteEvent>[0-7]['|,]?[\^|_]?[\^|_]?\-*)"
 CHORDPartStringPattern  = r"\<(?P<Base>[12348][26]?)\*\>(?P<ChordString>[^<$]+)"
 CHORDStringPattern      = r"\[(?P<Chord>[1-7][^\]]*)\]\-*"
 
+
 def ChordINPart(ChordString):
-    pass
+   pass 
