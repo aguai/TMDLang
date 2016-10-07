@@ -14,7 +14,7 @@ Key                 = 'C'       # default key is C
 Tempo               = 120.0     # default tempo 120
 SongName            = ''        # defult no name
 PartsContent        = []
-
+PartNameList        = []
 def CommitStripper(str):
     '''
     remove commits
@@ -58,10 +58,10 @@ def InstrumentSetGetter(PartContentList):
     return TempSet
     
 def PartSequenceGetter(inputFile):
-    PartNameList = re.findall(PartSequencePattern, inputFile)[0].split('->')[1:-1]
-    for nameStrIndex in range(len(PartNameList)):
-        PartNameList[nameStrIndex] = FormaterStripper(PartNameList[nameStrIndex])
-    return tuple(PartNameList)
+    TempList = re.findall(PartSequencePattern, inputFile)[0].split('->')[1:-1]
+    for nameStrIndex in range(len(TempList)):
+        TempList[nameStrIndex] = FormaterStripper(TempList[nameStrIndex])
+    return TempList
 
 ########################## Pass 2 ###################################################
 RawNoteSeqPattern       = r"\<(?P<Base>[0-7][0-7]?)\*\>(?P<NoteSeq>[^<$]+)"

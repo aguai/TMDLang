@@ -21,33 +21,42 @@ def FileChecker(ARGV):
         return False
     else:
         return True
-
-def main():
-    ARGV = sys.argv
-    if FileChecker(ARGV) == False:
-        sys.exit(1)
-    InputFile = open(ARGV[1], 'r').read()
-########################### For DEBUG ##############################
-    print("collectting notation info from %s... " % ARGV[1])  
+def Pass1(InputFile):
     TMDScanner.Key              =        TMDScanner.KeyGetter(InputFile)
     TMDScanner.Tempo            = float( TMDScanner.TempoGetter(InputFile) )
     TMDScanner.SongName         =        TMDScanner.SongNameGetter(InputFile)
     TMDScanner.PartsContent     =        TMDScanner.PartContentGetter(InputFile)
-    print('The Contents is \n' + str(TMDScanner.AllPartsContent))
-        
-    print('#########################')
+    TMDScanner.PartNameList     =        TMDScanner.PartSequenceGetter(InputFile)
+    TMDScanner.PartSet          =        TMDScanner.PartSetGetter(TMDScanner.PartsContent)
+    TMDScanner.InstrumentSet    =        TMDScanner.InstrumentSetGetter(TMDScanner.PartsContent)
+    
 
-    print('KEY\t=\t'        +     TMDScanner.Key)
-    print('Tempo\t=\t'      + str(TMDScanner.Tempo))
-    print('Song Name is '+ '<<'+  TMDScanner.SongName + '>>')
-    print('The Parts in the song is') 
-    print(TMDScanner.PartSequenceGetter(InputFile))
-    print('The Instruments in the song is') 
-    print(TMDScanner.InstrumentSet)
-#   print('''
-#   for 
-#   ''')
-########################### For DEBUG ##############################
+def main():
+    ARGV = sys.argv
+########################### Checking File Head ##################### 
+    if FileChecker(ARGV) == False:
+        sys.exit(1)
+########################### done Checking File Head ################ 
+    InputFile = open(ARGV[1], 'r').read()
+    Pass1(InputFile)
+########################### Confirming Pass 1 ######################
+    print('Given File is:\n'    +       InputFile               )
+    print('')
+    print('The Contents is')
+    for item in TMDScanner.PartsContent:
+        print('part:**' + str(item[0]) + '**\t:' 
+     + ' whith instrument:**'+ str(item[1]) + '**\t when bar number [' 
+                      + str(item[2]).replace('|','') +']\n' 
+                      + str(item[3]) )
+    print('')
+    print('KEY\t=\t'            +     TMDScanner.Key             )
+    print('Tempo\t=\t'          + str(TMDScanner.Tempo          ))
+    print('Song Name is '+ '<<' +     TMDScanner.SongName  + '>>')
+    print('')
+    print('The Sequnece in the song is:\n\t'           + str(TMDScanner.PartNameList ))
+    print('The Parts includes:\n\t'                    + str(TMDScanner.PartSet      )) 
+    print('The Instruments in the song is:\n\t'        + str(TMDScanner.InstrumentSet)) 
+########################### done Confirming Pass 1 ###################
     
     
 if __name__ == '__main__':
