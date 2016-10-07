@@ -67,8 +67,20 @@ def PartSequenceGetter(inputFile):
 RawNoteSeqPattern       = r"\<(?P<Base>[0-7][0-7]?)\*\>(?P<NoteSeq>[^<$]+)"
 NoteEventPattern        = r"(?P<NoteEvent>[0-7]['|,]?[\^|_]?[\^|_]?\-*)"
 CHORDPartStringPattern  = r"\<(?P<Base>[12348][26]?)\*\>(?P<ChordString>[^<$]+)"
-CHORDStringPattern      = r"\[(?P<Chord>[1-7][^\]]*)\]\-*"
+CHORDStringPattern      = r"(?P<Chord>\[[1-7][^\]]*\]\-*)"
 
-
-def ChordINPart(ChordString):
-   pass 
+def CodeStringGetter(PartContentList):                                                                  
+    TempList=[]                                                                                         
+    for ListItem in PartContentList:                                                                    
+        if ListItem[1] == 'CHORD':
+            MatchCHORD   =     re.findall(CHORDPartStringPattern, ListItem[3])[0]                                                            
+            TheChordStr  =     MatchCHORD[1]                     
+            TheBase      = int(MatchCHORD[0])              
+            ChordStrList =[]                                                                            
+            for C in re.findall(CHORDStringPattern, TheChordStr):                         
+                ChordStrList.append((C.rstrip('-') ,C.count('-')+1 ))                                    
+                TempList.append([ListItem[0],                                               
+                                [int(ListItem[2].replace('|', '')),                          
+                                TheBase ,                                                   
+                                tuple(ChordStrList)]]) 
+    return dict(TempList)# This make sure every part to be unique 

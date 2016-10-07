@@ -33,13 +33,14 @@ def Pass1(InputFile):
 
 def main():
     ARGV = sys.argv
-########################### Checking File Head ##################### 
+###########################      Checking File Head ################## 
     if FileChecker(ARGV) == False:
-        sys.exit(1)
-########################### done Checking File Head ################ 
+        sys.exit('File Type Error')
+########################### done Checking File Head ################## 
+########################### done Checking Header   ################### 
     InputFile = open(ARGV[1], 'r').read()
     Pass1(InputFile)
-########################### Confirming Pass 1 ######################
+###########################      Confirming Pass 1 ###################
     print('Given File is:\n'    +       InputFile               )
     print('')
     print('The Contents is')
@@ -57,7 +58,14 @@ def main():
     print('The Parts includes:\n\t'                    + str(TMDScanner.PartSet      )) 
     print('The Instruments in the song is:\n\t'        + str(TMDScanner.InstrumentSet)) 
 ########################### done Confirming Pass 1 ###################
-    
+###########################      Confirming Pass 2 ###################
+    print('What Pass 2 has got is\nCHORD:\n')
+    for k, v in TMDScanner.CodeStringGetter(TMDScanner.PartsContent).items():
+        print(k +":\t"+str(v))
+        if v[0]!=0:
+            print("\tChord MUST Begin with LEADING Bar\n\tFill \'0\' for Rhythem only Bar")
+            sys.exit('Fail To Compile %s' % ARGV[1] )
+
     
 if __name__ == '__main__':
     main()
