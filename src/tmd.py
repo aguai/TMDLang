@@ -15,7 +15,8 @@ def FileChecker(ARGV):
         print("there is no file named %s!" % ARGV[1])
         return False
 
-    elif re.search(TMDScanner.MarkupTypePattern,open(ARGV[1], 'r').readline())==None: # or re.search(r"\.[tT][mM][dD]", ARGV[1][-4:]) ==None:
+    elif re.search(TMDScanner.MarkupTypePattern,open(ARGV[1], 'r').readline())==None:
+        # or re.search(r"\.[tT][mM][dD]", ARGV[1][-4:]) ==None:
         print("unknown filetype")
         return False
     else:
