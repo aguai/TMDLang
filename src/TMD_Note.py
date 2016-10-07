@@ -5,7 +5,7 @@ yy=[]
 for i in range(len(x)):
     yy.append(tuple([x[i].replace('-',''), x[i].count('-')+1]))
 #############
-for i in AllPartContentList:
+for i in AllPartContent:
     if i[1]=='CHORD':
         print(i[0])
         ooxx=re.findall(r"\<(?P<Base>[12348][26]?)\*\>(?P<ChordString>[^<$]+)",i[3])[0]
