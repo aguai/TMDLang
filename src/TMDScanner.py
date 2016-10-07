@@ -3,7 +3,6 @@ import re
 ########################## Pass 1 ###################################################
 MarkupTypePattern   = r"^\:\:(?P<MarkType>\S+)\:\:\s*?$"
 PartSequencePattern = r"\-\>[^\#]+\#"
-ChordContentPattern = r"\<\s?(?P<TickBase>\d\d?)\s?\*\>(?P<ChordString>[^$\<]+)"
 PartContentPattern  = r"(?P<partname>\S+?):(?P<InstrumentName>\S+?)@\[(?P<Timing>\S+?)\]\{\s+?(?P<PartContent>[^}]+)\}"
 SongNamePattern     = r"\s*\*\*\s+?(?P<SongName>[^\*]+)\s+?\*\*\s*"
 TempoPattern        = r"\s*?\!\s*?\=\s*?(\d\d\d?\.?\d?\d?)\s*?\n"
@@ -55,3 +54,6 @@ def PartSequenceGetter(inputFile):
 ########################## Pass 2 ###################################################
 RawNoteSeqPattern   = r"\<(?P<Base>[0-7][0-7]?)\*\>(?P<NoteSeq>[^<$]+)"
 NoteEventPattern    = r"(?P<NoteEvent>[0-7]['|,]?[\^|_]?[\^|_]?\-*)"
+
+def ChordINPart(ChordString):
+    
