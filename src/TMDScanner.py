@@ -19,7 +19,7 @@ def CommitStripper(str):
     '''
     remove commits
     '''
-    return re.sub(r'#.+(\n|\r|\r\n|\n\r|$)', '',str)
+    return re.sub(r"\/\*[^\*]+\*\/", '',str)
 
 def FormaterStripper(str):
     ''' anything for format shall be trimed here'''
