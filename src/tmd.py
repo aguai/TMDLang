@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf8 -*-
-
-import cairo
 import TMDScanner
 import re
 import sys
 from pathlib import Path
+import TMDDrawer
 def FileChecker(ARGV):
     if len(ARGV)==1:
         print("usage:\n%s InputFile.pdf\n" % ARGV[0])
@@ -65,7 +64,12 @@ def main():
         if v[0]!=0:
             print("\tChord MUST Begin with LEADING Bar\n\tFill \'0\' for Rhythem only Bar")
             sys.exit('Fail To Compile %s' % ARGV[1] )
+###########################      Drawing Chord      ###################
 
+    Page=TMDDrawer.Page(TMDScanner.SongName, 'PDF', TMDDrawer.A4)
+    TMDDrawer.ChordDrawer(Page, '5', '', 'm', [30,20])
+    TMDDrawer.ChordDrawer(Page, '6', '', 'm', [99,20])
+    TMDDrawer.CloseUp(Page)
     
 if __name__ == '__main__':
     main()
