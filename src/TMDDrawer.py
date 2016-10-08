@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
 import cairo
 
-A4=[595.0, 842.0] # @ 300DPI
+A4=[2480.0, 3508.0] # @ 300DPI
 #def Page(NAME, TYPE, Size):
     # NAME: Song Name (with page#?)
     # TYPE: {PDF, SVG}
@@ -16,7 +16,8 @@ def ChordDrawer(NAME, TYPE, Size ,ChordList) :
     # NAME: Song Name (with page#?)
     # TYPE: {PDF, SVG}
     # Size: {A3, A4, B4, B3}
-    #
+    # ChordList: [Chord，...]
+    # Chord :[Root-> {'chr'/[1-7]/,['#'|'b'|''] }, Bass -> 'chr', Quality -> 'str', Position -> {x, y}]
     # Surface:  cairo.Surface 
     # Root:     char : with or without sup Flat or Sharp
     # Bass:     char : under a slash '/' ('' for no Alternative bass note to draw)
