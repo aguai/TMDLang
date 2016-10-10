@@ -1,18 +1,13 @@
 # -*- coding: utf8 -*-
 import cairo
-
-A4=[2480.0, 3508.0] # @ 300DPI
-#def Page(NAME, TYPE, Size):
-    # NAME: Song Name (with page#?)
-    # TYPE: {PDF, SVG}
-    # Size: {A3, A4, B4, B3}
-#    if   TYPE == 'PDF':
-#        return cairo.Context(cairo.PDFSurface(NAME+'.pdf', Size[0], Size[1]))
-#    elif TYPE == 'SVG':
-#        return cairo.Context(cairo.SVGSurface(NAME+'.svg', Size[0], Size[1]))
+# @ 300DPI
+A4=[2480.0, 3508.0] 
+B4=[3248.0, 2150.0] 
+A3=[4960.0, 3508.0]
+B3=[3248.0, 4300.0]
 
     
-def ChordDrawer(NAME, TYPE, Size ,ChordList) :
+def ChordDrawer(Surface ,ChordList) :
     # NAME: Song Name (with page#?)
     # TYPE: {PDF, SVG}
     # Size: {A3, A4, B4, B3}
@@ -23,16 +18,21 @@ def ChordDrawer(NAME, TYPE, Size ,ChordList) :
     # Bass:     char : under a slash '/' ('' for no Alternative bass note to draw)
     # Quality:  str  : Interval included ex: symbol like +, Δ(Maj7), o(dim), alt, sus, etc. 
     # Position: tuple: (x,y): position to draw this Chord 
+    #generate size here
+    ''' Draw Chord according ChordList[CHORD[3]] 
+        :TODO:: Kerning on 1-7, A-G, Sharp and Flat for FreeSerif  
+    ''' 
+
     Surface.set_source_rgb(0, 0, 0)
-    Surface.select_font_face("FreeSerif", cairo.FONT_SLANT_NORMAL,
-        cairo.FONT_WEIGHT_NORMAL)
-    Surface.set_font_size(20)
-    Surface.move_to(Position[0], Position[1])# 2200, 3208 for temp
-    Surface.show_text(Root)
-    Surface.set_font_size(11)
-    Surface.move_to(Position[0]+10, Position[1])
-    Surface.show_text(Quality)
-    Surface.show_page()
+    #  
+    for Chord in ChordList:
+        Surface.set_font_size(100) #Temp 
+        Surface.move_to(Chord[3][0], Chord[3][1])# 2200, 3208 for temp
+        Surface.show_text(Chord[0][0]) # show Root
+        Surface.set_font_size(55)
+        Surface.move_to(Chord[3][0]+45, Chord[3][1]+2)
+        Surface.show_text(Chord[2]) # Show Quality
+
 
 def CloseUp(Surface):
     Surface.show_page()

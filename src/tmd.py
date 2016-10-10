@@ -5,6 +5,23 @@ import re
 import sys
 from pathlib import Path
 import TMDDrawer
+import cairo
+testChordList = [
+    [('1',''), '', 'm', (300, 420)], 
+    [('1',''), '', '', (500, 420)], 
+    [('6',''), '', 'm', (900, 420)]
+    ]
+def Surface(NAME, TYPE, Size):
+    # NAME: Song Name (with page#?)
+    # TYPE: {PDF, SVG}
+    # Size: {A3, A4, B4, B3}
+
+    if   TYPE == 'PDF':
+        return cairo.Context(cairo.PDFSurface(NAME+'.pdf', Size[0], Size[1]))
+    elif TYPE == 'SVG':
+        return cairo.Context(cairo.SVGSurface(NAME+'.svg', Size[0], Size[1]))
+
+
 def FileChecker(ARGV):
     if len(ARGV)==1:
         print("usage:\n%s InputFile.pdf\n" % ARGV[0])
@@ -28,7 +45,6 @@ def Pass1(InputFile):
     TMDScanner.PartNameList     =        TMDScanner.PartSequenceGetter(InputFile)
     TMDScanner.PartSet          =        TMDScanner.PartSetGetter(TMDScanner.PartsContent)
     TMDScanner.InstrumentSet    =        TMDScanner.InstrumentSetGetter(TMDScanner.PartsContent)
-    
 
 def main():
     ARGV = sys.argv
@@ -57,6 +73,7 @@ def main():
     print('The Parts includes:\n\t'                    + str(TMDScanner.PartSet      )) 
     print('The Instruments in the song is:\n\t'        + str(TMDScanner.InstrumentSet)) 
 ########################### done Confirming Pass 1 ###################
+
 ###########################      Confirming Pass 2 ###################
     print('What Pass 2 has got is\nCHORD:\n')
     for k, v in TMDScanner.CodeStringGetter(TMDScanner.PartsContent).items():
@@ -65,11 +82,11 @@ def main():
             print("\tChord MUST Begin with LEADING Bar\n\tFill \'0\' for Rhythem only Bar")
             sys.exit('Fail To Compile %s' % ARGV[1] )
 ###########################      Drawing Chord      ###################
+# Chord :[Root-> {'chr'/[1-7]/,['#'|'b'|''] }, Bass -> 'chr', Quality -> 'str', Position -> {x, y}]
 
-    Page=TMDDrawer.Page(TMDScanner.SongName, 'PDF', TMDDrawer.A4)
-    TMDDrawer.ChordDrawer(Page, '5', '', 'm', [30,20])
-    TMDDrawer.ChordDrawer(Page, '6', '', 'm', [99,20])
-    TMDDrawer.CloseUp(Page)
-    
+    Page = Surface(TMDScanner.SongName, 'PDF', TMDDrawer.A4)
+    TMDDrawer.ChordDrawer(Page, testChordList)
+    Page.show_page()
+
 if __name__ == '__main__':
     main()
