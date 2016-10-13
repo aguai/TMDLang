@@ -64,11 +64,11 @@ def PartSequenceGetter(inputFile):
     return TempList
 
 ########################## Pass 2 ###################################################
-RawNoteSeqPattern       = r"\<(?P<Base>[0-7][0-7]?)\*\>(?P<NoteSeq>[^<$]+)"
-NoteEventPattern        = r"(?P<NoteEvent>[0-7]['|,]?[\^|_]?[\^|_]?\-*)"
-CHORDPartStringPattern  = r"\<(?P<Base>[12348][26]?)\*\>(?P<ChordString>[^<$]+)"
-CHORDStringPattern      = r"(?P<Chord>\[[1-7][^\]]*\]\-*)"
-
+RawNoteSeqPattern           = r"\<(?P<Base>[0-7][0-7]?)\*\>(?P<NoteSeq>[^<$]+)"
+NoteEventPattern            = r"(?P<NoteEvent>[0-7]['|,]?[\^|_]?[\^|_]?\-*)"
+CHORDPartStringPattern      = r"\<(?P<Base>[12348][26]?)\*\>(?P<ChordString>[^<$]+)"
+CHORDStringPattern          = r"(?P<Chord>\[[1-7][^\]]*\]\-*)"
+CHORDRootAndQualityPattern  = r"(?P<Root>[1-7]['|,]?)(?P<Quality>[^\]]*)"
 def CodeStringGetter(PartContentList):                                                                  
     TempList=[]                                                                                         
     for ListItem in PartContentList:                                                                    
@@ -78,7 +78,7 @@ def CodeStringGetter(PartContentList):
             TheBase      = int(MatchCHORD[0])              
             ChordStrList =[]                                                                            
             for C in re.findall(CHORDStringPattern, TheChordStr):                         
-                ChordStrList.append((C.rstrip('-') ,C.count('-')+1 ))                                    
+                ChordStrList.append((C.rstrip('-') ,len(C)- len(C.rstrip('-'))+1))                                    
                 TempList.append([ListItem[0],                                               
                                 [int(ListItem[2].replace('|', '')),                          
                                 TheBase ,                                                   
