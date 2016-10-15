@@ -78,7 +78,7 @@ def CodeStringGetter(PartContentList):
             TheBase      = int(MatchCHORD[0])              
             ChordStrList =[]                                                                            
             for C in re.findall(CHORDStringPattern, TheChordStr):                         
-                ChordStrList.append((C.rstrip('-') ,len(C)- len(C.rstrip('-'))+1))                                    
+                ChordStrList.append((re.findall(CHORDRootAndQualityPattern, C.rstrip('-')) ,len(C)- len(C.rstrip('-'))+1))                                    
                 TempList.append([ListItem[0],                                               
                                 [int(ListItem[2].replace('|', '')),                          
                                 TheBase ,                                                   
