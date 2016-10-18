@@ -6,11 +6,6 @@ import sys
 from pathlib import Path
 import TMDDrawer
 import cairocffi as cairo
-testChordList = [
-    [('1',''), '', 'm', (300, 420)], 
-    [('1',''), '', '', (500, 420)], 
-    [('6',''), '', 'm', (900, 420)]
-    ]
 def Surface(NAME, TYPE, Size):
     # NAME: Song Name (with page#?)
     # TYPE: {PDF, SVG}
@@ -82,8 +77,12 @@ def main():
             print("\tChord MUST Begin with LEADING Bar\n\tFill \'0\' for Rhythem only Bar")
             sys.exit('Fail To Compile %s' % ARGV[1] )
 ###########################      Drawing Chord      ###################
-# Chord :[Root-> {'chr'/[1-7]/,['#'|'b'|''] }, Bass -> 'chr', Quality -> 'str', Position -> {x, y}]
-
+# Chord :[Root-> {'chr'/[1-7]/,['#'|'b'|''] }, Bass -> '1-7', Quality -> 'm, aug, dim, alt', Intrval -> 7, 11, 6, 9, 13,Position -> {x, y}]
+testChordList = [
+    ['1','', '', 'm','', (300, 420)], 
+    ['1','', '', 'aug','', (500, 420)], 
+    ['6','', '', 'm','11' , (900, 420)]
+    ]
     Page = Surface(TMDScanner.SongName, 'PDF', TMDDrawer.A4)
     TMDDrawer.ChordDrawer(Page, testChordList)
     Page.show_page()
