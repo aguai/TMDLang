@@ -5,7 +5,7 @@ import re
 import sys
 from pathlib import Path
 import TMDDrawer
-import cairo
+import cairocffi as cairo
 testChordList = [
     [('1',''), '', 'm', (300, 420)], 
     [('1',''), '', '', (500, 420)], 
