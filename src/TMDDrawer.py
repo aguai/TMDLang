@@ -22,8 +22,16 @@ def ChordDrawer(Surface ,ChordList) :
     ''' Draw Chord according ChordList[CHORD[3]] 
         :TODO:: Kerning on 1-7, A-G, Sharp and Flat for FreeSerif  
     ''' 
-
     Surface.set_source_rgb(0, 0, 0)
+    Surface.move_to(105, 320)
+    Surface.set_line_width(0.5)        
+    for j in range(10):
+        for i in range(7):
+            Surface.rel_line_to(0, 200)
+            Surface.rel_move_to(384, -200)
+        Surface.rel_move_to(-2688, 320)
+    Surface.stroke()
+
     #  
     for Chord in ChordList:
         Surface.set_font_size(100) #Temp 
