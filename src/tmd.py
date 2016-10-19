@@ -6,6 +6,13 @@ import sys
 from pathlib import Path
 import TMDDrawer
 import cairocffi as cairo
+### for debug 
+testChordList = [
+    ['1','', '', 'm','', (300, 420)], 
+    ['1','', '', 'aug','', (500, 420)], 
+    ['6','', '', 'm','11' , (900, 420)]
+    ]
+###
 def Surface(NAME, TYPE, Size):
     # NAME: Song Name (with page#?)
     # TYPE: {PDF, SVG}
@@ -32,6 +39,7 @@ def FileChecker(ARGV):
         return False
     else:
         return True
+
 def Pass1(InputFile):
     TMDScanner.Key              =        TMDScanner.KeyGetter(InputFile)
     TMDScanner.Tempo            = float( TMDScanner.TempoGetter(InputFile) )
@@ -43,22 +51,22 @@ def Pass1(InputFile):
 
 def main():
     ARGV = sys.argv
-###########################      Checking File Head ################## 
+    ###########################      Checking File Head ############## 
     if FileChecker(ARGV) == False:
         sys.exit('File Type Error')
-########################### done Checking File Head ################## 
-########################### done Checking Header   ################### 
+    ####################### done Checking File Head ################## 
+    ####################### done Checking Header   ################### 
     InputFile = open(ARGV[1], 'r').read()
     Pass1(InputFile)
-###########################      Confirming Pass 1 ###################
+    #######################      Confirming Pass 1 ###################
     print('Given File is:\n'    +       InputFile               )
     print('')
     print('The Contents is')
     for item in TMDScanner.PartsContent:
         print('part:**' + str(item[0]) + '**\t:' 
-     + ' whith instrument:**'+ str(item[1]) + '**\t when bar number [' 
-                      + str(item[2]).replace('|','') +']\n' 
-                      + str(item[3]) )
+            + ' whith instrument:**'+ str(item[1]) + '**\t when bar number [' 
+            + str(item[2]).replace('|','') +']\n' 
+            + str(item[3]) )
     print('')
     print('KEY\t=\t'            +     TMDScanner.Key             )
     print('Tempo\t=\t'          + str(TMDScanner.Tempo          ))
@@ -67,22 +75,17 @@ def main():
     print('The Sequnece in the song is:\n\t'           + str(TMDScanner.PartNameList ))
     print('The Parts includes:\n\t'                    + str(TMDScanner.PartSet      )) 
     print('The Instruments in the song is:\n\t'        + str(TMDScanner.InstrumentSet)) 
-########################### done Confirming Pass 1 ###################
-
-###########################      Confirming Pass 2 ###################
+    ########################### done Confirming Pass 1 ###################
+    ###########################      Confirming Pass 2 ###################
     print('What Pass 2 has got is\nCHORD:\n')
     for k, v in TMDScanner.CodeStringGetter(TMDScanner.PartsContent).items():
         print(k +":\t"+str(v))
         if v[0]!=0:
             print("\tChord MUST Begin with LEADING Bar\n\tFill \'0\' for Rhythem only Bar")
             sys.exit('Fail To Compile %s' % ARGV[1] )
-###########################      Drawing Chord      ###################
-# Chord :[Root-> {'chr'/[1-7]/,['#'|'b'|''] }, Bass -> '1-7', Quality -> 'm, aug, dim, alt', Intrval -> 7, 11, 6, 9, 13,Position -> {x, y}]
-testChordList = [
-    ['1','', '', 'm','', (300, 420)], 
-    ['1','', '', 'aug','', (500, 420)], 
-    ['6','', '', 'm','11' , (900, 420)]
-    ]
+    ###########################      Drawing Chord      ###################
+    # Chord :[Root-> {'chr'/[1-7]/,['#'|'b'|''] }, Bass -> '1-7', Quality -> 'm, aug, dim, alt', Intrval -> 7, 11, 6, 9, 13,Position -> {x, y}]
+
     Page = Surface(TMDScanner.SongName, 'PDF', TMDDrawer.A4)
     TMDDrawer.ChordDrawer(Page, testChordList)
     Page.show_page()
