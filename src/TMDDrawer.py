@@ -12,7 +12,7 @@ def ChordDrawer(Surface ,ChordList) :
     # TYPE: {PDF, SVG}
     # Size: {A3, A4, B4, B3}
     # ChordList: [Chord，...]
-    # Chord :[Root-> {'chr'/[1-7]/,['#'|'b'|''] }, Bass -> 'chr', Quality -> 'str', Position -> {x, y}]
+    # Chord :[Root-> ('chr'/[1-7]/,['#'|'b'|''] ), Bass -> 'chr', Quality -> ('m/aug/dim','9/11/7-5/...'), Position -> (x, y)]
     # Surface:  cairo.Surface 
     # Root:     char : with or without sup Flat or Sharp
     # Bass:     char : under a slash '/' ('' for no Alternative bass note to draw)
@@ -39,7 +39,7 @@ def ChordDrawer(Surface ,ChordList) :
         Surface.show_text(Chord[0][0]) # show Root
         Surface.set_font_size(55)
         Surface.move_to(Chord[3][0]+45, Chord[3][1]+2)
-        Surface.show_text(Chord[2]) # Show Quality
+        Surface.show_text(Chord[2][0]) # Show Quality
 
 
 def CloseUp(Surface):
