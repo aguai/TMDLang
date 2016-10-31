@@ -18,10 +18,12 @@ def Surface(NAME, TYPE, Size):
     # TYPE: {PDF, SVG}
     # Size: {A3, A4, B4, B3}
 
-    if   TYPE == 'PDF':
-        return cairo.Context(cairo.PDFSurface(NAME+'.pdf', Size[0], Size[1]))
+    if TYPE == 'PDF':
+        surface, ext = cairo.PDFSurface, '.pdf'
     elif TYPE == 'SVG':
-        return cairo.Context(cairo.SVGSurface(NAME+'.svg', Size[0], Size[1]))
+        surface, ext = cairo.SVGSurface, '.svg'
+
+    return cairo.Context(surface(NAME+ext, Size[0], Size[1]))
 
 
 def FileChecker(ARGV):

@@ -38,30 +38,22 @@ def PartContentGetter(inputFile):
     '''
     to collect all the part content and instrument content
     '''
-    PartContentList=[]
-    for Match in re.findall(PartContentPattern, inputFile):
-        Match = list(Match)
-        Match[3]=CommitStripper(FormaterStripper(Match[3]))
-        PartContentList.append(Match)
-    return PartContentList
+    def strip(match):
+        match = list(match)
+        match[3] = CommitStripper(FormaterStripper(match[3]))
+        return match
+
+    return [strip(m) for m in re.findall(PartContentPattern, inputFile)]
 
 def PartSetGetter(PartContentList):
-    TempSet=set()
-    for Match in PartContentList:
-        TempSet.add(Match[0])
-    return TempSet
+    return set(match[0] for match in PartContentList)
 
 def InstrumentSetGetter(PartContentList):
-    TempSet=set()
-    for Match in PartContentList:
-        TempSet.add(Match[1])
-    return TempSet
+    return set(match[1] for match in PartContentList)
 
 def PartSequenceGetter(inputFile):
     TempList = re.findall(PartSequencePattern, inputFile)[0].split('->')[1:-1]
-    for nameStrIndex in range(len(TempList)):
-        TempList[nameStrIndex] = FormaterStripper(TempList[nameStrIndex])
-    return TempList
+    return [FormaterStripper(item) for item in TempList]
 
 ########################## Pass 2 ###################################################
 RawNoteSeqPattern           = r"\<(?P<Base>[0-7][0-7]?)\*\>(?P<NoteSeq>[^<$]+)"
@@ -70,17 +62,17 @@ CHORDPartStringPattern      = r"\<(?P<Base>[12348][26]?)\*\>(?P<ChordString>[^<$
 CHORDStringPattern          = r"(?P<Chord>\[[1-7][^\]]*\]\-*)"
 CHORDRootAndQualityPattern  = r"(?P<Root>[1-7]['|,]?)(?P<Quality>[^\]]*)"
 def CodeStringGetter(PartContentList):
+    PartContentList = (item for item in PartContentList if item[1] == 'CHORD')
     TempList=[]
     for ListItem in PartContentList:
-        if ListItem[1] == 'CHORD':
-            MatchCHORD   =     re.findall(CHORDPartStringPattern, ListItem[3])[0]
-            TheChordStr  =     MatchCHORD[1]
-            TheBase      = int(MatchCHORD[0])
-            ChordStrList =[]
-            for C in re.findall(CHORDStringPattern, TheChordStr):
-                ChordStrList.append((re.findall(CHORDRootAndQualityPattern, C.rstrip('-')) ,len(C)- len(C.rstrip('-'))+1))
-                TempList.append([ListItem[0],
-                                [int(ListItem[2].replace('|', '')),
-                                TheBase ,
-                                tuple(ChordStrList)]])
+        MatchCHORD   =     re.findall(CHORDPartStringPattern, ListItem[3])[0]
+        TheChordStr  =     MatchCHORD[1]
+        TheBase      = int(MatchCHORD[0])
+        ChordStrList =[]
+        for C in re.findall(CHORDStringPattern, TheChordStr):
+            ChordStrList.append((re.findall(CHORDRootAndQualityPattern, C.rstrip('-')) ,len(C)- len(C.rstrip('-'))+1))
+            TempList.append([ListItem[0],
+                            [int(ListItem[2].replace('|', '')),
+                            TheBase ,
+                            tuple(ChordStrList)]])
     return dict(TempList)# This make sure every part to be unique
