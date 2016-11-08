@@ -1,20 +1,12 @@
 # -*- coding: utf8 -*-
 import re
 ########################## Pass 1 ###################################################
-MarkupTypePattern   = r"^\:\:(?P<MarkType>\S+)\:\:\s*?$"
-PartSequencePattern = r"\-\>[^\#]+\#"
+PartSequencePattern = r"\-\>([^\#]+)->\#"
 PartContentPattern  = r"(?P<partname>\S+?):(?P<InstrumentName>\S+?)@\[(?P<Timing>\S+?)\]\{\s+?(?P<PartContent>[^}]+)\}"
 SongNamePattern     = r"\s*\*\*\s+?(?P<SongName>[^\*]+)\s+?\*\*\s*"
 TempoPattern        = r"\s*?\!\s*?\=\s*?(\d\d\d?\.?\d?\d?)\s*?\n"
 KeyPattern          = r"\s*?\?\s*\=\s*(?P<Key>[ABCDEFGabcdefg][',]?m?)\s*?\n"
-ReservedInstrumet   = set({'CHORD', 'GROOVE'})
-InstrumentSet       = set()
-PartSet             = set()
-Key                 = 'C'       # default key is C
-Tempo               = 120.0     # default tempo 120
-SongName            = ''        # defult no name
-PartsContent        = []
-PartNameList        = []
+
 def CommitStripper(str):
     '''
     remove commits
@@ -25,13 +17,22 @@ def FormaterStripper(str):
     ''' anything for format shall be trimed here'''
     return str.replace(' ', '').replace('\n', '').replace('|', '').replace('\t', '').replace('\r', '')
 def TempoGetter(inputFile):
-    return re.findall(TempoPattern, inputFile)[0]
+    if len(re.findall(TempoPattern, inputFile)) != 1:
+        return 120
+    else:
+        return re.findall(TempoPattern, inputFile)[0]
 
 def KeyGetter(inputFile):
-    return re.findall(KeyPattern, inputFile)[0]
+    if len(re.findall(KeyPattern, inputFile)) != 1:
+        return 'C'
+    else:
+        return re.findall(KeyPattern, inputFile)[0]
 
 def SongNameGetter(inputFile):
-    return re.findall(SongNamePattern, inputFile)[0]
+    if len(re.findall(SongNamePattern, inputFile)) != 1:
+        return ''
+    else:
+        return re.findall(SongNamePattern, inputFile)[0]
 
 
 def PartContentGetter(inputFile):
@@ -52,8 +53,11 @@ def InstrumentSetGetter(PartContentList):
     return set(match[1] for match in PartContentList)
 
 def PartSequenceGetter(inputFile):
-    TempList = re.findall(PartSequencePattern, inputFile)[0].split('->')[1:-1]
-    return [FormaterStripper(item) for item in TempList]
+    if len(re.findall(PartSequencePattern, inputFile)) == 1:
+        TempList = re.findall(PartSequencePattern, inputFile)[0].split('->')
+        return [FormaterStripper(item) for item in TempList]
+    else:
+        return []
 
 ########################## Pass 2 ###################################################
 RawNoteSeqPattern           = r"\<(?P<Base>[0-7][0-7]?)\*\>(?P<NoteSeq>[^<$]+)"
@@ -61,9 +65,13 @@ NoteEventPattern            = r"(?P<NoteEvent>[0-7]['|,]?[\^|_]?[\^|_]?\-*)"
 CHORDPartStringPattern      = r"\<(?P<Base>[12348][26]?)\*\>(?P<ChordString>[^<$]+)"
 CHORDStringPattern          = r"(?P<Chord>\[[1-7][^\]]*\]\-*)"
 CHORDRootAndQualityPattern  = r"(?P<Root>[1-7]['|,]?)(?P<Quality>[^\]]*)"
-def CodeStringGetter(PartContentList):
-    PartContentList = (item for item in PartContentList if item[1] == 'CHORD')
+def ChordStringGetter(PartsContent):
+    print('in Scanning Pass 2:\nCodeStringGetter:') #@debug
+    print(PartsContent)
+
+
     TempList=[]
+    '''
     for ListItem in PartContentList:
         MatchCHORD   =     re.findall(CHORDPartStringPattern, ListItem[3])[0]
         TheChordStr  =     MatchCHORD[1]
@@ -76,3 +84,4 @@ def CodeStringGetter(PartContentList):
                             TheBase ,
                             tuple(ChordStrList)]])
     return dict(TempList)# This make sure every part to be unique
+    '''
