@@ -65,14 +65,13 @@ NoteEventPattern            = r"(?P<NoteEvent>[0-7]['|,]?[\^|_]?[\^|_]?\-*)"
 CHORDPartStringPattern      = r"\<(?P<Base>[12348][26]?)\*\>(?P<ChordString>[^<$]+)"
 CHORDStringPattern          = r"(?P<Chord>\[[1-7][^\]]*\]\-*)"
 CHORDRootAndQualityPattern  = r"(?P<Root>[1-7]['|,]?)(?P<Quality>[^\]]*)"
+
 def ChordStringGetter(PartsContent):
-    print('in Scanning Pass 2:\nCodeStringGetter:') #@debug
-    print(PartsContent)
-
-
-    TempList=[]
+    #print('in Scanning Pass 2:\nCodeStringGetter:') #@debug
+    print(PartsContent) #@debug
+    #TempList=[]
     '''
-    for ListItem in PartContentList:
+    for ListItem in PartsContent:
         MatchCHORD   =     re.findall(CHORDPartStringPattern, ListItem[3])[0]
         TheChordStr  =     MatchCHORD[1]
         TheBase      = int(MatchCHORD[0])
