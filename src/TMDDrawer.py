@@ -1,5 +1,5 @@
 # -*- coding: utf8 -*-
-import cairo
+import cairocffi as cairo
 # @ 300DPI
 A4=[2480.0, 3508.0] 
 B4=[3248.0, 2150.0] 
