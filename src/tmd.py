@@ -6,11 +6,17 @@ import sys
 from pathlib import Path
 import TMDDrawer
 import cairocffi as cairo
-### for debug 
+### for debug
 testChordList = [
+<<<<<<< HEAD
     [('1',''), '', ('m', ''), (300, 420)], 
     [('1',''), '',( 'aug',''), (500, 420)], 
     [('6',''), '',( 'm','11') , (900, 420)]
+=======
+    ['1','', '', 'm','', (300, 420)],
+    ['1','', '', 'aug','', (500, 420)],
+    ['6','', '', 'm','11' , (900, 420)]
+>>>>>>> pyx/patch-1-pythonic
     ]
 ###
 def Surface(NAME, TYPE, Size):
@@ -18,17 +24,19 @@ def Surface(NAME, TYPE, Size):
     # TYPE: {PDF, SVG}
     # Size: {A3, A4, B4, B3}
 
-    if   TYPE == 'PDF':
-        return cairo.Context(cairo.PDFSurface(NAME+'.pdf', Size[0], Size[1]))
+    if TYPE == 'PDF':
+        surface, ext = cairo.PDFSurface, '.pdf'
     elif TYPE == 'SVG':
-        return cairo.Context(cairo.SVGSurface(NAME+'.svg', Size[0], Size[1]))
+        surface, ext = cairo.SVGSurface, '.svg'
+
+    return cairo.Context(surface(NAME+ext, Size[0], Size[1]))
 
 
 def FileChecker(ARGV):
     if len(ARGV)==1:
         print("usage:\n%s InputFile.pdf\n" % ARGV[0])
         return False
-    
+
     elif Path(ARGV[1]).is_file() != True:
         print("there is no file named %s!" % ARGV[1])
         return False
@@ -51,11 +59,11 @@ def Pass1(InputFile):
 
 def main():
     ARGV = sys.argv
-    ###########################      Checking File Head ############## 
+    ###########################      Checking File Head ##############
     if FileChecker(ARGV) == False:
         sys.exit('File Type Error')
-    ####################### done Checking File Head ################## 
-    ####################### done Checking Header   ################### 
+    ####################### done Checking File Head ##################
+    ####################### done Checking Header   ###################
     InputFile = open(ARGV[1], 'r').read()
     Pass1(InputFile)
     #######################      Confirming Pass 1 ###################
@@ -63,9 +71,9 @@ def main():
     print('')
     print('The Contents is')
     for item in TMDScanner.PartsContent:
-        print('part:**' + str(item[0]) + '**\t:' 
-            + ' whith instrument:**'+ str(item[1]) + '**\t when bar number [' 
-            + str(item[2]).replace('|','') +']\n' 
+        print('part:**' + str(item[0]) + '**\t:'
+            + ' whith instrument:**'+ str(item[1]) + '**\t when bar number ['
+            + str(item[2]).replace('|','') +']\n'
             + str(item[3]) )
     print('')
     print('KEY\t=\t'            +     TMDScanner.Key             )
@@ -73,8 +81,8 @@ def main():
     print('Song Name is '+ '<<' +     TMDScanner.SongName  + '>>')
     print('')
     print('The Sequnece in the song is:\n\t'           + str(TMDScanner.PartNameList ))
-    print('The Parts includes:\n\t'                    + str(TMDScanner.PartSet      )) 
-    print('The Instruments in the song is:\n\t'        + str(TMDScanner.InstrumentSet)) 
+    print('The Parts includes:\n\t'                    + str(TMDScanner.PartSet      ))
+    print('The Instruments in the song is:\n\t'        + str(TMDScanner.InstrumentSet))
     ########################### done Confirming Pass 1 ###################
     ###########################      Confirming Pass 2 ###################
     print('What Pass 2 has got is\nCHORD:\n')
