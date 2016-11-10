@@ -1,22 +1,25 @@
 # -*- coding: utf8 -*-
 import re
-########################## Pass 1 ###################################################
+########################## Pass 1 ########################################
 PartSequencePattern = r"\-\>([^\#]+)->\#"
-PartContentPattern  = r"(?P<partname>\S+?):(?P<InstrumentName>\S+?)@\[(?P<Timing>\S+?)\]\{\s+?(?P<PartContent>[^}]+)\}"
-SongNamePattern     = r"\s*\*\*\s+?(?P<SongName>[^\*]+)\s+?\*\*\s*"
-TempoPattern        = r"\s*?\!\s*?\=\s*?(\d\d\d?\.?\d?\d?)\s*?\n"
-KeyPattern          = r"\s*?\?\s*\=\s*(?P<Key>[ABCDEFGabcdefg][',]?m?)\s*?\n"
-SignaturePattern    = r"^\s*\<((?P<BeatsPerBar>\d\d?)\/(?P<BeatType>[12348][26]?))\>\s*"
+PartContentPattern = r"(?P<partname>\S+?):(?P<InstrumentName>\S+?)@\[(?P<Timing>\S+?)\]\{\s+?(?P<PartContent>[^}]+)\}"
+SongNamePattern = r"\s*\*\*\s+?(?P<SongName>[^\*]+)\s+?\*\*\s*"
+TempoPattern = r"\s*?\!\s*?\=\s*?(\d\d\d?\.?\d?\d?)\s*?\n"
+KeyPattern = r"\s*?\?\s*\=\s*(?P<Key>[ABCDEFGabcdefg][',]?m?)\s*?\n"
+SignaturePattern = r"^\s*\<((?P<BeatsPerBar>\d\d?)\/(?P<BeatType>[12348][26]?))\>\s*"
+
 
 def CommitStripper(str):
     '''
     remove commits
     '''
-    return re.sub(r"\/\*[^\*]+\*\/", '',str)
+    return re.sub(r"\/\*[^\*]+\*\/", '', str)
+
 
 def FormaterStripper(str):
     ''' anything for format shall be trimed here'''
     return str.replace(' ', '').replace('\n', '').replace('|', '').replace('\t', '').replace('\r', '')
+
 
 def TempoGetter(inputFile):
     if len(re.findall(TempoPattern, inputFile)) != 1:
@@ -24,11 +27,13 @@ def TempoGetter(inputFile):
     else:
         return re.findall(TempoPattern, inputFile)[0]
 
+
 def KeyGetter(inputFile):
     if len(re.findall(KeyPattern, inputFile)) != 1:
         return 'C'
     else:
         return re.findall(KeyPattern, inputFile)[0]
+
 
 def SongNameGetter(inputFile):
     if len(re.findall(SongNamePattern, inputFile)) != 1:
@@ -48,11 +53,14 @@ def PartContentGetter(inputFile):
 
     return [strip(m) for m in re.findall(PartContentPattern, inputFile)]
 
+
 def PartSetGetter(PartContentList):
     return set(match[0] for match in PartContentList)
 
+
 def InstrumentSetGetter(PartContentList):
     return set(match[1] for match in PartContentList)
+
 
 def PartSequenceGetter(inputFile):
     if len(re.findall(PartSequencePattern, inputFile)) == 1:
@@ -61,24 +69,26 @@ def PartSequenceGetter(inputFile):
     else:
         return []
 
+
 def SignatureGetter(inputFile):
     Sig = re.findall(SignaturePattern, inputFile)
     if Sig == []:
         return [4, 4]
     else:
         return [int(Sig[1]), int(Sig[2])]
-########################## Pass 2 ##################################################
-RawNoteSeqPattern           = re.compile(r"\<(?P<Base>[0-7][0-7]?)\*\>(?P<NoteSeq>[^<$]+)")
-NoteEventPattern            = re.compile(r"(?P<NoteEvent>[0-7]['|,]?[\^|_]?[\^|_]?\-*)")
-CHORDPartStringPattern      = re.compile(r"\<(?P<Base>[12348][26]?)\*\>(?P<ChordString>[^<$]+)")
-CHORDStringPattern          = re.compile(r"(?P<Chord>\[[1-7][^\]]*\]\-*)")
-CHORDRootAndQualityPattern  = re.compile(r"(?P<Root>[1-7]['|,]?)(?P<Quality>[^\]]*)")
+########################## Pass 2 ########################################
+RawNoteSeqPattern = r"\<(?P<Base>[0-7][0-7]?)\*\>(?P<NoteSeq>[^<$]+)"
+NoteEventPattern = r"(?P<NoteEvent>[0-7]['|,]?[\^|_]?[\^|_]?\-*)"
+CHORDPartStringPattern = r"\<(?P<Base>[12348][26]?)\*\>(?P<ChordString>[^<$]+)"
+CHORDStringPattern = r"(?P<Chord>\[[1-7][^\]]*\]\-*)"
+CHORDRootAndQualityPattern = r"(?P<Root>[1-7]['|,]?)(?P<Quality>[^\]]*)"
+
 
 def ChordStringGetter(PartsContent):
-    #print('in Scanning Pass 2:\nCodeStringGetter:') #@debug
-    #print(PartsContent) #@debug
+    # print('in Scanning Pass 2:\nCodeStringGetter:') #@debug
+    # print(PartsContent) #@debug
     for i in PartsContent:
-        #print(i[3])
+        # print(i[3])
         print(re.findall(CHORDStringPattern, i[3]))
 
 ''' #@debug:note
@@ -92,7 +102,7 @@ Out[3]:
         ('<1*>', '[1]-[1/5]-[1]-[1][1]')
         ]
 '''
-    #TempList=[]
+# TempList=[]
 '''
     for ListItem in PartsContent:
         MatchCHORD   =     re.findall(CHORDPartStringPattern, ListItem[3])[0]

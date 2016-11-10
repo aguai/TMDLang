@@ -68,6 +68,7 @@ def main():
     InputFile = open(ARGV[1], 'r').read()
     Key = Scan.KeyGetter(InputFile)
     Tempo = float(Scan.TempoGetter(InputFile))
+    Signature = Scan.SignatureGetter(InputFile)
     SongName = Scan.SongNameGetter(InputFile)
     PartsContent = Scan.PartContentGetter(InputFile)
     PartNameList = Scan.PartSequenceGetter(InputFile)
