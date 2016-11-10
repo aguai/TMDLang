@@ -6,6 +6,7 @@ PartContentPattern  = r"(?P<partname>\S+?):(?P<InstrumentName>\S+?)@\[(?P<Timing
 SongNamePattern     = r"\s*\*\*\s+?(?P<SongName>[^\*]+)\s+?\*\*\s*"
 TempoPattern        = r"\s*?\!\s*?\=\s*?(\d\d\d?\.?\d?\d?)\s*?\n"
 KeyPattern          = r"\s*?\?\s*\=\s*(?P<Key>[ABCDEFGabcdefg][',]?m?)\s*?\n"
+SignaturePattern    = r"^\s*\<((?P<BeatsPerBar>\d\d?)\/(?P<BeatType>[12348][26]?))\>\s*"
 
 def CommitStripper(str):
     '''
@@ -16,6 +17,7 @@ def CommitStripper(str):
 def FormaterStripper(str):
     ''' anything for format shall be trimed here'''
     return str.replace(' ', '').replace('\n', '').replace('|', '').replace('\t', '').replace('\r', '')
+
 def TempoGetter(inputFile):
     if len(re.findall(TempoPattern, inputFile)) != 1:
         return 120
@@ -59,12 +61,18 @@ def PartSequenceGetter(inputFile):
     else:
         return []
 
-########################## Pass 2 ###################################################
-RawNoteSeqPattern           = r"\<(?P<Base>[0-7][0-7]?)\*\>(?P<NoteSeq>[^<$]+)"
-NoteEventPattern            = r"(?P<NoteEvent>[0-7]['|,]?[\^|_]?[\^|_]?\-*)"
-CHORDPartStringPattern      = r"\<(?P<Base>[12348][26]?)\*\>(?P<ChordString>[^<$]+)"
-CHORDStringPattern          = r"(?P<Chord>\[[1-7][^\]]*\]\-*)"
-CHORDRootAndQualityPattern  = r"(?P<Root>[1-7]['|,]?)(?P<Quality>[^\]]*)"
+def SignatureGetter(inputFile):
+    Sig = re.findall(SignaturePattern, inputFile)
+    if Sig == []:
+        return [4, 4]
+    else:
+        return [int(Sig[1]), int(Sig[2])]
+########################## Pass 2 ##################################################
+RawNoteSeqPattern           = re.compile(r"\<(?P<Base>[0-7][0-7]?)\*\>(?P<NoteSeq>[^<$]+)")
+NoteEventPattern            = re.compile(r"(?P<NoteEvent>[0-7]['|,]?[\^|_]?[\^|_]?\-*)")
+CHORDPartStringPattern      = re.compile(r"\<(?P<Base>[12348][26]?)\*\>(?P<ChordString>[^<$]+)")
+CHORDStringPattern          = re.compile(r"(?P<Chord>\[[1-7][^\]]*\]\-*)")
+CHORDRootAndQualityPattern  = re.compile(r"(?P<Root>[1-7]['|,]?)(?P<Quality>[^\]]*)")
 
 def ChordStringGetter(PartsContent):
     #print('in Scanning Pass 2:\nCodeStringGetter:') #@debug
@@ -85,7 +93,7 @@ Out[3]:
         ]
 '''
     #TempList=[]
-    '''
+'''
     for ListItem in PartsContent:
         MatchCHORD   =     re.findall(CHORDPartStringPattern, ListItem[3])[0]
         TheChordStr  =     MatchCHORD[1]
@@ -98,4 +106,4 @@ Out[3]:
                             TheBase ,
                             tuple(ChordStrList)]])
     return dict(TempList)# This make sure every part to be unique
-    '''
+'''

@@ -1,0 +1,10 @@
+# so that different base notes/chord/events can be written in a same Part Block
+In [1]: pat=r"(\<\d\d?\*\>)([^\<]+)"
+In [2]: tstr = "<4*>[1]-[1sus4][1maj7][3]-[3sus4][3][4]-[4/2][4][4m]-[6,][7,]<1*>[1]-[1/5]-[1]-[1][1]"
+In [3]: re.findall(pat , tstr)
+Out[3]:
+        [
+        ('<4*>', '[1]-[1sus4][1maj7][3]-[3sus4][3][4]-[4/2][4][4m]-[6,][7,]'), 
+        ('<1*>', '[1]-[1/5]-[1]-[1][1]')
+        ]
+'''
