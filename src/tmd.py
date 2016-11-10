@@ -19,13 +19,21 @@ PartNameList = []
 InputFile = ''
 
 # for debug
+# means 6♯m7-5/1 (bass on 1) with 1 bar before and place at 0.5 *
+# bar_length
 testChordList = [
-    [('1', ''), '', ('m', ''), (0, 0, 0)],
-    [('1', ''), '', ('aug', ''), (0, 1, 4)],
-    [('6', ''), '', ('m', '11'), (1, )],
-    [('1', ''), '', ('m', ''), (300, 420)],
-    [('1', ''), '', ('aug', ''), (500, 420)],
-    [('6', ''), '', ('m', '11'), (900, 420)]
+    [
+        ["6", "''", "m"],
+        "7-5",
+        ["1", ""],
+        [1, 0.5]
+    ],
+    [
+        ["3", "','", "m"],
+        "7-5",
+        ["1", "''"],
+        [1, 0.5]
+    ]    
 ]
 ###
 
@@ -78,31 +86,25 @@ def main():
     ########################### done Confirming Pass 1 ###################
 
     ###########################      Confirming Pass 2 ###################
+    # for Chord First 
+    for p in PartsContent:
+        if p[2]!='|0|':
+            print('any CHORD part should started with |0|!')
+            sys.exit('syntax error')
+        if p[1] == 'CHORD' :
+            print(p)
+            Scan.ChordStringGetter(PartsContent)
 
-    print('What Pass 2 has got is:')  # @debug
-    Scan.ChordStringGetter(PartsContent)
-
-    '''
-    Chord :[
-            Root        -> ['' ->  '1~7' ,                      #-> full size
-                            pitch -> '♯'|'♭'|'' ],              #-> 1/2 size
-            Bass        -> '' ,                                 #-> 1/2 size bold
-            Quality     -> 'm, aug, dim, alt' ,                 #-> 1/2 size
-            Intrval     -> sus, sus4, 7, 11, 6, 9, 13 .etc... , #-> 1/3 size
-            Position    -> [X, m, n] -> X + n/m bars before 
-            ]
-    '''
-#    for k, v in Scan.CodeStringGetter(PartsContent).items():
-#        print(k +":\t"+str(v))
-#        if v[0]!=0:
-#            print("\tChord MUST Begin with LEADING Bar\n\tFill \'0\' for Rhythem only Bar")
-#            sys.exit('Fail To Compile %s' % ARGV[1] )
-#######################################################################
-###########################      Drawing Chord      ###################
-#    Page = Surface(TMDScanner.SongName, 'PDF', TMDDrawer.A4)
-#    TMDDrawer.ChordDrawer(Page, testChordList)
-#    Page.show_page()
-
+#  [["6", "♯", "m"], "7-5", ["3", "♭"],  [1, 0.5]]  # means 6♯m7-5/3♭ (bass on 3,) with 1 bar before and place at 0.5 * bar_length
+#    Chord :[
+#            Root        -> [ '7' ->  '1~7' ,                                 #-> full size
+#            pitch       ->   '♯'|'♭'|'' ,                                       #-> 1/2 size
+#            Quality    ->  'm, aug, dim, alt' ]                         #-> 1/2 size
+#            Intrval      ->  'sus, sus4, 7, 11, 6, 9, 13' .etc... , #-> 1/3 size
+#            Bass        ->['4','♭'] ,                                           #-> 1/2 size bold
+#            Position    -> [X, W]                                            #-> X bars after and print at the W * Bar_length (1>W>0) 
+#            ]
+#
 
 if __name__ == '__main__':
     main()

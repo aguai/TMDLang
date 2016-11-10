@@ -2,7 +2,8 @@
 import re
 ########################## Pass 1 ########################################
 PartSequencePattern = r"\-\>([^\#]+)->\#"
-PartContentPattern = r"(?P<partname>\S+?):(?P<InstrumentName>\S+?)@\[(?P<Timing>\S+?)\]\{\s+?(?P<PartContent>[^}]+)\}"
+PartContentPattern = r"(?P<partname>\S+?)?:(?P<InstrumentName>\S+?)?@\[(?P<Timing>\S+?)?\]\{\s+?(?P<PartContent>[^}]+)\}"
+#PartContentPattern = r"(\S*):(\S*)@\[(\S*)\]\{([^\}]+)\}"
 SongNamePattern = r"\s*\*\*\s+?(?P<SongName>[^\*]+)\s+?\*\*\s*"
 TempoPattern = r"\s*?\!\s*?\=\s*?(\d\d\d?\.?\d?\d?)\s*?\n"
 KeyPattern = r"\s*?\?\s*\=\s*(?P<Key>[ABCDEFGabcdefg][',]?m?)\s*?\n"
@@ -77,43 +78,21 @@ def SignatureGetter(inputFile):
     else:
         return [int(Sig[1]), int(Sig[2])]
 ########################## Pass 2 ########################################
-RawNoteSeqPattern = r"\<(?P<Base>[0-7][0-7]?)\*\>(?P<NoteSeq>[^<$]+)"
-NoteEventPattern = r"(?P<NoteEvent>[0-7]['|,]?[\^|_]?[\^|_]?\-*)"
-CHORDPartStringPattern = r"\<(?P<Base>[12348][26]?)\*\>(?P<ChordString>[^<$]+)"
+
 CHORDStringPattern = r"(?P<Chord>\[[1-7][^\]]*\]\-*)"
 CHORDRootAndQualityPattern = r"(?P<Root>[1-7]['|,]?)(?P<Quality>[^\]]*)"
 
 
-def ChordStringGetter(PartsContent):
-    # print('in Scanning Pass 2:\nCodeStringGetter:') #@debug
-    # print(PartsContent) #@debug
-    for i in PartsContent:
-        # print(i[3])
-        print(re.findall(CHORDStringPattern, i[3]))
-
-''' #@debug:note
-# so that different base notes/chord/events can be written in a same Part Block
-In [1]: pat=r"(\<\d\d?\*\>)([^\<]+)"
-In [2]: tstr = "<4*>[1]-[1sus4][1maj7][3]-[3sus4][3][4]-[4/2][4][4m]-[6,][7,]<1*>[1]-[1/5]-[1]-[1][1]"
-In [3]: re.findall(pat , tstr)
-Out[3]:
-        [
-        ('<4*>', '[1]-[1sus4][1maj7][3]-[3sus4][3][4]-[4/2][4][4m]-[6,][7,]'), 
-        ('<1*>', '[1]-[1/5]-[1]-[1][1]')
-        ]
-'''
-# TempList=[]
-'''
-    for ListItem in PartsContent:
-        MatchCHORD   =     re.findall(CHORDPartStringPattern, ListItem[3])[0]
-        TheChordStr  =     MatchCHORD[1]
-        TheBase      = int(MatchCHORD[0])
-        ChordStrList =[]
-        for C in re.findall(CHORDStringPattern, TheChordStr):
-            ChordStrList.append((re.findall(CHORDRootAndQualityPattern, C.rstrip('-')) ,len(C)- len(C.rstrip('-'))+1))
-            TempList.append([ListItem[0],
-                            [int(ListItem[2].replace('|', '')),
-                            TheBase ,
-                            tuple(ChordStrList)]])
-    return dict(TempList)# This make sure every part to be unique
-'''
+def ChordStringGetter(PartsContainsChord):    
+    CHORDPartStringPattern = r"\<(?P<Base>[12348][26]?)\*\>(?P<ChordString>[^<$]+)" # return a tuple ('base', ''StringWithChords)
+    pass
+#  [["6", "♯", "m"], "7-5", ["3", "♭"],  [1, 0.5]]  # means 6♯m7-5/3♭ (bass on 3,) with 1 bar before and place at 0.5 * bar_length
+#    Chord :[
+#            Root        -> [ '7' ->  '1~7' ,                                 #-> full size
+#            pitch       ->   '♯'|'♭'|'' ,                                       #-> 1/2 size
+#            Quality    ->  'm, aug, dim, alt' ]                         #-> 1/2 size
+#            Intrval      ->  'sus, sus4, 7, 11, 6, 9, 13' .etc... , #-> 1/3 size
+#            Bass        ->['4','♭'] ,                                           #-> 1/2 size bold
+#            Position    -> [X, W]                                            #-> X bars after and print at the W * Bar_length (1>W>0)
+#            ]
+#
