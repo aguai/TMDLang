@@ -5,7 +5,7 @@ PartSequencePattern = r"\-\>([^\#]+)->\#"
 PartContentPattern = r"(?P<partname>\S+?)?:(?P<InstrumentName>\S+?)?@\[(?P<Timing>\S+?)?\]\{\s+?(?P<PartContent>[^}]+)\}"
 #PartContentPattern = r"(\S*):(\S*)@\[(\S*)\]\{([^\}]+)\}"
 SongNamePattern = r"\s*\*\*\s+?(?P<SongName>[^\*]+)\s+?\*\*\s*"
-TempoPattern = r"\s*?\!\s*?\=\s*?(\d\d\d?\.?\d?\d?)\s*?\n"
+TempoPattern = r"\s*?\!\s*?\=s\s*?(\d\d\d?\.?\d?\d?)\s*?\n"
 KeyPattern = r"\s*?\?\s*\=\s*(?P<Key>[ABCDEFGabcdefg][',]?m?)\s*?\n"
 SignaturePattern = r"^\s*\<((?P<BeatsPerBar>\d\d?)\/(?P<BeatType>[12348][26]?))\>\s*"
 
