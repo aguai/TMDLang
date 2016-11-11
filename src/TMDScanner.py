@@ -10,16 +10,16 @@ KeyPattern = r"\s*?\?\s*\=\s*(?P<Key>[ABCDEFGabcdefg][',]?m?)\s*?\n"
 SignaturePattern = r"^\s*\<((?P<BeatsPerBar>\d\d?)\/(?P<BeatType>[12348][26]?))\>\s*"
 
 
-def CommitStripper(str):
+def CommitStripper(strn):
     '''
     remove commits
     '''
-    return re.sub(r"\/\*[^\*]+\*\/", '', str)
+    return re.sub(r"\/\*[^\*]+\*\/", '', strn)
 
 
-def FormaterStripper(str):
+def FormaterStripper(strn):
     ''' anything for format shall be trimed here'''
-    return str.replace(' ', '').replace('\n', '').replace('|', '').replace('\t', '').replace('\r', '')
+    return strn.replace(' ', '').replace('\n', '').replace('|', '').replace('\t', '').replace('\r', '')
 
 
 def TempoGetter(inputFile):
@@ -84,7 +84,7 @@ CHORDRootAndQualityPattern = r"(?P<Root>[1-7]['|,]?)(?P<Quality>[^\]]*)"
 
 
 def ChordStringGetter(PartsContainsChord):    
-    CHORDPartStringPattern = r"\<(?P<Base>[12348][26]?)\*\>(?P<ChordString>[^<$]+)" # return a tuple ('base', ''StringWithChords)
+    CHORDPartStringPattern = r"\<(?P<Base>[12348][26]?)\*\>(?P<ChordString>[^<$]+)"   # return a tuple ('base', ''StringWithChords)
     pass
 #  [["6", "♯", "m"], "7-5", ["3", "♭"],  [1, 0.5]]  # means 6♯m7-5/3♭ (bass on 3,) with 1 bar before and place at 0.5 * bar_length
 #    Chord :[
