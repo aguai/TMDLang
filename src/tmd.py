@@ -33,7 +33,7 @@ testChordList = [
         "7-5",
         ["1", "''"],
         [1, 0.5]
-    ]    
+    ]
 ]
 ###
 
@@ -86,9 +86,9 @@ def main():
     ########################### done Confirming Pass 1 ###################
 
     ###########################      Confirming Pass 2 ###################
-    # for Chord First 
+    # for Chord First
     for p in PartsContent:
-        if p[1] == 'CHORD' and p[2]!='|0|':
+        if p[1] == 'CHORD' and p[2] != '|0|':
             print('any CHORD part should started with |0|!')
             sys.exit('syntax error')
 
@@ -101,7 +101,7 @@ def main():
 #            Quality    ->  'm, aug, dim, alt' ]                         #-> 1/2 size
 #            Intrval      ->  'sus, sus4, 7, 11, 6, 9, 13' .etc... , #-> 1/3 size
 #            Bass        ->['4','♭'] ,                                           #-> 1/2 size bold
-#            Position    -> [X, W]                                            #-> X bars after and print at the W * Bar_length (1>W>0) 
+#            Position    -> [X, W]                                            #-> X bars after and print at the W * Bar_length (1>W>0)
 #            ]
 #
 
