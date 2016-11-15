@@ -88,12 +88,11 @@ def main():
     ###########################      Confirming Pass 2 ###################
     # for Chord First 
     for p in PartsContent:
-        if p[2]!='|0|':
+        if p[1] == 'CHORD' and p[2]!='|0|':
             print('any CHORD part should started with |0|!')
             sys.exit('syntax error')
-        if p[1] == 'CHORD' :
-            print(p)
-            Scan.ChordStringGetter(PartsContent)
+
+    Scan.ChordStringGetter(PartsContent)
 
 #  [["6", "♯", "m"], "7-5", ["3", "♭"],  [1, 0.5]]  # means 6♯m7-5/3♭ (bass on 3,) with 1 bar before and place at 0.5 * bar_length
 #    Chord :[

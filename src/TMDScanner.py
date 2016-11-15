@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import re
+from sys import exit
 ########################## Pass 1 ########################################
 PartSequencePattern = r"\-\>([^\#]+)->\#"
 PartContentPattern = r"(?P<partname>\S+?)?:(?P<InstrumentName>\S+?)?@\[(?P<Timing>\S+?)?\]\{\s+?(?P<PartContent>[^}]+)\}"
@@ -7,7 +8,7 @@ PartContentPattern = r"(?P<partname>\S+?)?:(?P<InstrumentName>\S+?)?@\[(?P<Timin
 SongNamePattern = r"\s*\*\*\s+?(?P<SongName>[^\*]+)\s+?\*\*\s*"
 TempoPattern = r"\s*?\!\s*?\=\s*?(\d\d\d?\.?\d?\d?)\s*?\n"
 KeyPattern = r"\s*?\?\s*\=\s*(?P<Key>[ABCDEFGabcdefg][',]?m?)\s*?\n"
-SignaturePattern = r"^\s*\<((?P<BeatsPerBar>\d\d?)\/(?P<BeatType>[12348][26]?))\>\s*"
+SignaturePattern = r"\<(?P<BeatsPerBar>\d\d?)\/(?P<TickBase>\d\d?)\>\s*[\n\r]"
 
 
 def CommitStripper(strn):
@@ -73,33 +74,39 @@ def PartSequenceGetter(inputFile):
 
 def SignatureGetter(inputFile):
     Sig = re.findall(SignaturePattern, inputFile)
-    if Sig == []:
-        return [4, 4]
+    if len(Sig) == 0:
+        print('signature set to default 4/4')
+        return (4, 4)
+
+    elif Sig[0][1] not in {'1', '2', '4', '8', '16', '32'}:
+        print('signature should base on 1, 2, 4, 8, 16, 32.')
+        exit('invalid signature')
+
     else:
-        return [int(Sig[1]), int(Sig[2])]
-########################## Pass 2 ########################################
+        return (int(Sig[0][0]), int(Sig[0][1]))
 
 
-
-
-def ChordStringGetter(PartsContainsChord):    
-    CHORDPartStringPattern = r"\<(?P<Base>[12348][26]?)\*\>(?P<ChordString>[^<$]+)"   # return a tuple ('base', ''StringWithChords)
+def ChordStringGetter(PartsContainsChord):
+    # return a tuple ('base', ''StringWithChords)
+    CHORDPartStringPattern = r"\<(?P<Base>[12348][26]?)\*\>(?P<ChordString>[^<$]+)"
     CHORDStringPattern = r"(?P<Chord>\[[1-7][^\]]*\]\-*)"
     CHORDBassAndQualityPattern = r"(?P<Bass>[1-7]['|,]?)(?P<Quality>[^\]]*)"
-    BaseAndChordStrPattern = r"(\<(1|2|4|8|16|32)\*>)([^\<|$]+ )" # put a "<4*>[1][6m][4][5][1][5][1]-" to split tickBase and chorda string  
+    # put a "<4*>[1][6m][4][5][1][5][1]-" to split tickBase and chorda string
+    BaseAndChordStrPattern = r"(\<(1|2|4|8|16|32)\*>)([^\<|$]+ )"
     pass
-#  [["6", "♯", "m"], "7-5", ["3", "♭"],  [1, 0.5]]  # means 6♯m7-5/3♭ (bass on 3,) with 1 bar before and place at 0.5 * bar_length
-#    Chord :[
-#            Root        -> [ '7' ->  '1~7' ,                                 #-> full size
-#            pitch       ->   '♯'|'♭'|'' ,                                       #-> 1/2 size
-#            Quality    ->  'm, aug, dim, alt' ]                         #-> 1/2 size
-#            Intrval      ->  'sus, sus4, 7, 11, 6, 9, 13' .etc... , #-> 1/3 size
-#            Bass        ->['4','♭'] ,                                           #-> 1/2 size bold
-#            Position    -> [X, W]                                            #-> X bars after and print at the W * Bar_length (1>W>0)
-#            ]
-#
-# =========================================================================================
-# In [10]: [int(re.findall(r"(\<(1|2|4|8|16|32)\*>)([^\<|$]+)" , opc[3])[0][1]), re.findall(r"(\<(1|2|4|8|16|32)\*>)([^\<|$]+ )" , opc[3])[0][2]]
-# Out[10]: [4, '[1]-[1sus4][1maj7][3]-[3sus4][3][4]-[4/2][4][4m]-[6,][7,]']
-#In [11]: opc
-#Out[11]: ['Ending', 'CHORD', '|0|', '<4*>[1]-[1sus4][1maj7][3]-[3sus4][3][4]-[4/2][4][4m]-[6,][7,]<1*>[1]-[1/5]-[1]-[1][1]']
+    #  [["6", "♯", "m"], "7-5", ["3", "♭"],  [1, 0.5]]  # means 6♯m7-5/3♭ (bass on 3,) with 1 bar before and place at 0.5 * bar_length
+    #    Chord :[
+    #            Root        -> [ '7' ->  '1~7' ,                                 #-> full size
+    #            pitch       ->   '♯'|'♭'|'' ,                                       #-> 1/2 size
+    #            Quality    ->  'm, aug, dim, alt' ]                         #-> 1/2 size
+    #            Intrval      ->  'sus, sus4, 7, 11, 6, 9, 13' .etc... , #-> 1/3 size
+    #            Bass        ->['4','♭'] ,                                           #-> 1/2 size bold
+    #            Position    -> [X, W]                                            #-> X bars after and print at the W * Bar_length (1>W>0)
+    #            ]
+    #
+    # =========================================================================================
+    # In [10]: [int(re.findall(r"(\<(1|2|4|8|16|32)\*>)([^\<|$]+)" , opc[3])[0][1]), re.findall(r"(\<(1|2|4|8|16|32)\*>)([^\<|$]+ )" , opc[3])[0][2]]
+    # Out[10]: [4, '[1]-[1sus4][1maj7][3]-[3sus4][3][4]-[4/2][4][4m]-[6,][7,]']
+    # In [11]: opc
+    # Out[11]: ['Ending', 'CHORD', '|0|', '<4*>[1]-[1sus4][1maj7][3]-[3sus4][3][4]-[4/2][4][4m]-[6,][7,]<1*>[1]-[1/5]-[1]-[1][1]']
+    # retrun
