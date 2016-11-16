@@ -3,8 +3,7 @@ import re
 from sys import exit
 ########################## Pass 1 ########################################
 PartSequencePattern = r"\-\>([^\#]+)->\#"
-PartContentPattern = r"(?P<partname>\S+?)?:(?P<InstrumentName>\S+?)?@\[(?P<Timing>\S+?)?\]\{\s+?(?P<PartContent>[^}]+)\}"
-#PartContentPattern = r"(\S*):(\S*)@\[(\S*)\]\{([^\}]+)\}"
+PartContentPattern = r"(?P<partname>\S+?)?:(?P<InstrumentName>\S+?)?@\[(?P<Timing>\S+?)?\]\{\s+?(?P<PartContent>[^\}]+)\}"
 SongNamePattern = r"\s*\*\*\s+?(?P<SongName>[^\*]+)\s+?\*\*\s*"
 TempoPattern = r"\s*?\!\s*?\=\s*?(\d\d\d?\.?\d?\d?)\s*?\n"
 KeyPattern = r"\s*?\?\s*\=\s*(?P<Key>[ABCDEFGabcdefg][',]?m?)\s*?\n"
