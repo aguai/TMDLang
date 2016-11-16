@@ -96,6 +96,7 @@ def ChordListGetter(PartsContainsChord):
     BaseAndChordStrPattern = r"(\<(1|2|4|8|16|32)\*>)([^\<|$]+ )"
     pass
     # return ['PartName':(CHORD, CHORD, CHORD, CHORD, CHORD, CHORD, CHORD), 'PartName':(CHORD, CHORD, CHORD, CHORD, CHORD, CHORD, CHORD),... ]
+    # which PartName is PartsContainsChord[i][0] and Chord is combine with signature and 'string'
     #  [["6", "♯", "m"], "7-5", ["3", "♭"],  [1, 0.5]]  # means 6♯m7-5/3♭ (bass on 3,) with 1 bar before and place at 0.5 * bar_length
     #    Chord :[
     #            Root        -> [ '7' ->  '1~7' ,                                 #-> full size
