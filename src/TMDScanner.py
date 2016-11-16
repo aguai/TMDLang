@@ -86,7 +86,8 @@ def SignatureGetter(inputFile):
         return (int(Sig[0][0]), int(Sig[0][1]))
 
 
-def ChordStringGetter(PartsContainsChord):
+def ChordListGetter(PartsContainsChord):
+    print(PartsContainsChord)  # debug
     # return a tuple ('base', ''StringWithChords)
     CHORDPartStringPattern = r"\<(?P<Base>[12348][26]?)\*\>(?P<ChordString>[^<$]+)"
     CHORDStringPattern = r"(?P<Chord>\[[1-7][^\]]*\]\-*)"
@@ -94,6 +95,7 @@ def ChordStringGetter(PartsContainsChord):
     # put a "<4*>[1][6m][4][5][1][5][1]-" to split tickBase and chorda string
     BaseAndChordStrPattern = r"(\<(1|2|4|8|16|32)\*>)([^\<|$]+ )"
     pass
+    # return ['PartName':(CHORD, CHORD, CHORD, CHORD, CHORD, CHORD, CHORD), 'PartName':(CHORD, CHORD, CHORD, CHORD, CHORD, CHORD, CHORD),... ]
     #  [["6", "♯", "m"], "7-5", ["3", "♭"],  [1, 0.5]]  # means 6♯m7-5/3♭ (bass on 3,) with 1 bar before and place at 0.5 * bar_length
     #    Chord :[
     #            Root        -> [ '7' ->  '1~7' ,                                 #-> full size
@@ -104,9 +106,16 @@ def ChordStringGetter(PartsContainsChord):
     #            Position    -> [X, W]                                            #-> X bars after and print at the W * Bar_length (1>W>0)
     #            ]
     #
-    # =========================================================================================
     # In [10]: [int(re.findall(r"(\<(1|2|4|8|16|32)\*>)([^\<|$]+)" , opc[3])[0][1]), re.findall(r"(\<(1|2|4|8|16|32)\*>)([^\<|$]+ )" , opc[3])[0][2]]
     # Out[10]: [4, '[1]-[1sus4][1maj7][3]-[3sus4][3][4]-[4/2][4][4m]-[6,][7,]']
     # In [11]: opc
     # Out[11]: ['Ending', 'CHORD', '|0|', '<4*>[1]-[1sus4][1maj7][3]-[3sus4][3][4]-[4/2][4][4m]-[6,][7,]<1*>[1]-[1/5]-[1]-[1][1]']
-    # retrun
+    # =========================================================================================
+    #    Chord :[
+    #            Root        -> [ '7' ->  '1~7' ,                                 #-> full size
+    #            pitch       ->   '♯'|'♭'|'' ,                                       #-> 1/2 size
+    #            Quality    ->  'm, aug, dim, alt' ]                         #-> 1/2 size
+    #            Intrval      ->  'sus, sus4, 7, 11, 6, 9, 13' .etc... , #-> 1/3 size
+    #            Bass        ->['4','♭'] ,                                           #-> 1/2 size bold
+    #            Position    -> [X, W]                                            #-> X bars after and print at the W * Bar_length (1>W>0)
+    #            ]

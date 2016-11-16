@@ -87,12 +87,18 @@ def main():
 
     ###########################      Confirming Pass 2 ###################
     # for Chord First
-    for p in PartsContent:
-        if p[1] == 'CHORD' and p[2] != '|0|':
-            print('any CHORD part should started with |0|!')
-            sys.exit('syntax error')
+    def PartsContainsChord(PRTCNT):
+        L=[]
+        for p in PRTCNT:
+            if p[1] == 'CHORD' :
+                if p[2] != '|0|':
+                    print('any CHORD part should started with |0|!')
+                    sys.exit('syntax error')
+                else:
+                    L.append(p)
+        return L                
 
-    Scan.ChordStringGetter(PartsContent)
+    Scan.ChordListGetter(PartsContainsChord(PartsContent))
 
 #  [["6", "♯", "m"], "7-5", ["3", "♭"],  [1, 0.5]]  # means 6♯m7-5/3♭ (bass on 3,) with 1 bar before and place at 0.5 * bar_length
 #    Chord :[
