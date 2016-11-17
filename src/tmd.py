@@ -19,26 +19,6 @@ PartsContent = []
 PartNameList = []
 InputFile = ''
 
-# for debug
-# means 6♯m7-5/1 (bass on 1) with 1 bar before and place at 0.5 *
-# bar_length
-testChordList = [
-    [
-        ["6", "''", "m"],
-        "7-5",
-        ["1", ""],
-        [1, 0.5]
-    ],
-    [
-        ["3", "','", "m"],
-        "7-5",
-        ["1", "''"],
-        [1, 0.5]
-    ]
-]
-###
-
-
 def FileChecker(ARGV):
     MarkupTypePattern = r"^\:\:(?P<MarkType>\S+)\:\:\s*?$"
     if len(ARGV) == 1:
@@ -101,16 +81,16 @@ def main():
 
     Scan.ChordListGetter(PartsContainsChord(PartsContent))
 
-#  [["6", "♯", "m"], "7-5", ["3", "♭"],  [1, 0.5]]  # means 6♯m7-5/3♭ (bass on 3,) with 1 bar before and place at 0.5 * bar_length
-#    Chord :[
-#            Root        -> [ '7' ->  '1~7' ,                                 #-> full size
-#            pitch       ->   '♯'|'♭'|'' ,                                       #-> 1/2 size
-#            Quality    ->  'm, aug, dim, alt' ]                         #-> 1/2 size
-#            Intrval      ->  'sus, sus4, 7, 11, 6, 9, 13' .etc... , #-> 1/3 size
-#            Bass        ->['4','♭'] ,                                           #-> 1/2 size bold
-#            Position    -> [X, W]                                            #-> X bars after and print at the W * Bar_length (1>W>0)
-#            ]
-#
+        #  [["6", "♯", "m"], "7-5", ["3", "♭"],  [1, 0.5]]  # means 6♯m7-5/3♭ (bass on 3,) with 1 bar before and place at 0.5 * bar_length
+        #    Chord :[
+        #            Root        -> [ '7' ->  '1~7' ,                                 #-> full size
+        #            pitch       ->   '♯'|'♭'|'' ,                                       #-> 1/2 size
+        #            Quality    ->  'm, aug, dim, alt' ]                         #-> 1/2 size
+        #            Intrval      ->  'sus, sus4, 7, 11, 6, 9, 13' .etc... , #-> 1/3 size
+        #            Bass        ->['4','♭'] ,                                           #-> 1/2 size bold
+        #            Lengh    -> frac(x,y)                                            #->  (<basetick *> / (m of <n/m>) ) ???<= confuse now....
+        #            ]
+        #
 
 if __name__ == '__main__':
     main()

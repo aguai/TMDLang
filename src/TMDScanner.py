@@ -104,7 +104,7 @@ def ChordListGetter(PartsContainsChord):
     #            Quality    ->  'm, aug, dim, alt' ]                         #-> 1/2 size
     #            Intrval      ->  'sus, sus4, 7, 11, 6, 9, 13' .etc... , #-> 1/3 size
     #            Bass        ->['4','♭'] ,                                           #-> 1/2 size bold
-    #            Lengh    -> frac(x,y)                                            #-> X bars after and print at the W * Bar_length (1>W>0)
+    #            Lengh    -> frac(x,y)                                            #-> confuse now
     #            ]
     #
     # In [10]: [int(re.findall(r"(\<(1|2|4|8|16|32)\*>)([^\<|$]+)" , opc[3])[0][1]), re.findall(r"(\<(1|2|4|8|16|32)\*>)([^\<|$]+ )" , opc[3])[0][2]]
