@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 from sys import exit
+from fractions import Fraction as frac
 ########################## Pass 1 ########################################
 PartSequencePattern = r"\-\>([^\#]+)->\#"
 PartContentPattern = r"(?P<partname>\S+?)?:(?P<InstrumentName>\S+?)?@\[(?P<Timing>\S+?)?\]\{\s+?(?P<PartContent>[^\}]+)\}"
@@ -92,8 +93,9 @@ def ChordListGetter(PartsContainsChord):
     CHORDBassAndQualityPattern = r"(?P<Bass>[1-7]['|,]?)(?P<Quality>[^\]]*)"
     # put a "<4*>[1][6m][4][5][1][5][1]-" to split tickBase and chorda string
     BaseAndChordStrPattern = r"(\<(1|2|4|8|16|32)\*>)([^\<|$]+ )"
+
     pass
-    # return ['PartName':(CHORD, CHORD, CHORD, CHORD, CHORD, CHORD, CHORD), 'PartName':(CHORD, CHORD, CHORD, CHORD, CHORD, CHORD, CHORD),... ]
+    # return [{'PartName':[ CHORD, CHORD, CHORD, CHORD, CHORD, CHORD, CHORD]}, {}'PartName':[CHORD, CHORD, CHORD, CHORD, CHORD, CHORD, CHORD],... ]
     # which PartName is PartsContainsChord[i][0] and Chord is combine with signature and 'string'
     #  [["6", "♯", "m"], "7-5", ["3", "♭"],  [1, 0.5]]  # means 6♯m7-5/3♭ (bass on 3,) with 1 bar before and place at 0.5 * bar_length
     #    Chord :[
@@ -102,7 +104,7 @@ def ChordListGetter(PartsContainsChord):
     #            Quality    ->  'm, aug, dim, alt' ]                         #-> 1/2 size
     #            Intrval      ->  'sus, sus4, 7, 11, 6, 9, 13' .etc... , #-> 1/3 size
     #            Bass        ->['4','♭'] ,                                           #-> 1/2 size bold
-    #            Position    -> [X, W]                                            #-> X bars after and print at the W * Bar_length (1>W>0)
+    #            Lengh    -> frac(x,y)                                            #-> X bars after and print at the W * Bar_length (1>W>0)
     #            ]
     #
     # In [10]: [int(re.findall(r"(\<(1|2|4|8|16|32)\*>)([^\<|$]+)" , opc[3])[0][1]), re.findall(r"(\<(1|2|4|8|16|32)\*>)([^\<|$]+ )" , opc[3])[0][2]]
@@ -110,11 +112,11 @@ def ChordListGetter(PartsContainsChord):
     # In [11]: opc
     # Out[11]: ['Ending', 'CHORD', '|0|', '<4*>[1]-[1sus4][1maj7][3]-[3sus4][3][4]-[4/2][4][4m]-[6,][7,]<1*>[1]-[1/5]-[1]-[1][1]']
     # =========================================================================================
-    #    Chord :[
-    #            Root        -> [ '7' ->  '1~7' ,                                 #-> full size
-    #            pitch       ->   '♯'|'♭'|'' ,                                       #-> 1/2 size
-    #            Quality    ->  'm, aug, dim, alt' ]                         #-> 1/2 size
-    #            Intrval      ->  'sus, sus4, 7, 11, 6, 9, 13' .etc... , #-> 1/3 size
-    #            Bass        ->['4','♭'] ,                                           #-> 1/2 size bold
-    #            Position    -> [X, W]                                            #-> X bars after and print at the W * Bar_length (1>W>0)
-    #            ]
+    # find Partname
+    #@ pseudo code
+    #   def makeCHORDList('<4*>[1]-[1sus4][1maj7][3]-[3sus4][3][4]-[4/2][4][4m]-[6,][7,]<1*>[1]-[1/5]-[1]-[1][1]' -> strContains Chords):
+    #       blah blah blah
+    #       return CHORDList
+    #       
+    #   for item in PartsContainsChord:
+    #       return {item[0]:makeCHORDList(item[3])}
