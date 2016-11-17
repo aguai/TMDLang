@@ -5,6 +5,7 @@ import re
 import sys
 from pathlib import Path
 import TMDDrawer as Draw
+from fractions import Fraction as frac
 import cairocffi as cairo
 ''' necessery variables '''
 ReservedInstrumet = set({'CHORD', 'GROOVE'})
