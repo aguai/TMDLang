@@ -19,6 +19,7 @@ PartsContent = []
 PartNameList = []
 InputFile = ''
 
+
 def FileChecker(ARGV):
     MarkupTypePattern = r"^\:\:(?P<MarkType>\S+)\:\:\s*?$"
     if len(ARGV) == 1:
@@ -49,10 +50,13 @@ def Surface(NAME, TYPE, Size):
 
 def main():
     ARGV = sys.argv
+
     ###########################      Checking File Head ##############
+    
     if FileChecker(ARGV) == False:
         sys.exit('File Type Error')
     ####################### done Checking File Head ##################
+    
     ####################### done Checking Header   ###################
     InputFile = open(ARGV[1], 'r').read()
     Key = Scan.KeyGetter(InputFile)
@@ -69,28 +73,29 @@ def main():
     ###########################      Confirming Pass 2 ###################
     # for Chord First
     def PartsContainsChord(PRTCNT):
-        L=[]
+        L = []
         for p in PRTCNT:
-            if p[1] == 'CHORD' :
+            if p[1] == 'CHORD':
                 if p[2] != '|0|':
                     print('any CHORD part should started with |0|!')
                     sys.exit('syntax error')
                 else:
                     L.append(p)
-        return L                
+        return L
 
     Scan.ChordListGetter(PartsContainsChord(PartsContent))
 
-        #  [["6", "♯", "m"], "7-5", ["3", "♭"],  [1, 0.5]]  # means 6♯m7-5/3♭ (bass on 3,) with 1 bar before and place at 0.5 * bar_length
-        #    Chord :[
-        #            Root        -> [ '7' ->  '1~7' ,                                 #-> full size
-        #            pitch       ->   '♯'|'♭'|'' ,                                       #-> 1/2 size
-        #            Quality    ->  'm, aug, dim, alt' ]                         #-> 1/2 size
-        #            Intrval      ->  'sus, sus4, 7, 11, 6, 9, 13' .etc... , #-> 1/3 size
-        #            Bass        ->['4','♭'] ,                                           #-> 1/2 size bold
-        #            Lengh    -> frac(x,y)                                            #->  (<basetick *> / (m of <n/m>) ) ???<= confuse now....
-        #            ]
-        #
+    #  [["6", "♯", "m"], "7-5", ["3", "♭"],  [1, 0.5]]  # means 6♯m7-5/3♭ (bass on 3,) with 1 bar before and place at 0.5 * bar_length
+    #    Chord :[
+    #            Root        -> [ '7' ->  '1~7' ,                                 #-> full size
+    #            pitch       ->   '♯'|'♭'|'' ,                                       #-> 1/2 size
+    #            Quality    ->  'm, aug, dim, alt' ]                         #-> 1/2 size
+    #            Intrval      ->  'sus, sus4, 7, 11, 6, 9, 13' .etc... , #-> 1/3 size
+    #            Bass        ->['4','♭'] ,                                           #-> 1/2 size bold
+    #            Lengh    -> frac(x,y)                                            #->  (<basetick *> / (m of <n/m>) ) ???<= confuse now....
+    #            ]
+    #
+
 
 if __name__ == '__main__':
     main()

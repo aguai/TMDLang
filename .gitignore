@@ -96,3 +96,5 @@ ENV/
 tmd.build/
 
 .DS_Store
+.history/*
+.history/
