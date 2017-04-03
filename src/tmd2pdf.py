@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/env python3
 # -*- coding: utf8 -*-
 import TMDScanner as Scan
 import re
@@ -23,7 +23,7 @@ InputFile = ''
 def FileChecker(ARGV):
     MarkupTypePattern = r"^\:\:(?P<MarkType>\S+)\:\:\s*?$"
     if len(ARGV) == 1:
-        print("usage:\n%s InputFile.pdf\n" % ARGV[0])
+        print("usage:\n%s InputFile.tmd\n" % ARGV[0])
         return False
 
     elif Path(ARGV[1]).is_file() != True:
@@ -43,21 +43,31 @@ def Surface(NAME, TYPE, Size):
     # Size: {A3, A4, B4, B3}
     if TYPE == 'PDF':
         surface, ext = cairo.PDFSurface, '.pdf'
-    elif TYPE == 'SVG':
-        surface, ext = cairo.SVGSurface, '.svg'
     return cairo.Context(surface(NAME + ext, Size[0], Size[1]))
+
+
+def PartsContainsChord(PRTCNT):
+    L = []
+    for p in PRTCNT:
+        if p[1] == 'CHORD':
+            if p[2] != '|0|':
+                print('any CHORD part should started with |0|!')
+                sys.exit('syntax error')
+            else:
+                L.append(p)
+    return L
 
 
 def main():
     ARGV = sys.argv
 
-    ###########################      Checking File Head ##############
-    
+    # Checking File Head #
+
     if FileChecker(ARGV) == False:
         sys.exit('File Type Error')
-    ####################### done Checking File Head ##################
-    
-    ####################### done Checking Header   ###################
+    # done Checking File Head #
+
+    # done Checking Header
     InputFile = open(ARGV[1], 'r').read()
     Key = Scan.KeyGetter(InputFile)
     Tempo = float(Scan.TempoGetter(InputFile))
@@ -68,34 +78,23 @@ def main():
     PartSet = Scan.PartSetGetter(PartsContent)
     InstrumentSet = Scan.InstrumentSetGetter(PartsContent)
 
-    ########################### done Confirming Pass 1 ###################
-
-    ###########################      Confirming Pass 2 ###################
-    # for Chord First
-    def PartsContainsChord(PRTCNT):
-        L = []
-        for p in PRTCNT:
-            if p[1] == 'CHORD':
-                if p[2] != '|0|':
-                    print('any CHORD part should started with |0|!')
-                    sys.exit('syntax error')
-                else:
-                    L.append(p)
-        return L
-
+    # done Confirming Pass 1
+    #      Confirming Pass 2
+    #      for Chord First
     Scan.ChordListGetter(PartsContainsChord(PartsContent))
-
-    #  [["6", "♯", "m"], "7-5", ["3", "♭"],  [1, 0.5]]  # means 6♯m7-5/3♭ (bass on 3,) with 1 bar before and place at 0.5 * bar_length
+'''
+    #  [["6", "♯", "m"], "7-5", ["3", "♭"],  [1, 0.5]]
+    #  means 6♯m7-5/3♭ (bass on 3,) with 1 bar before and place at 0.5 * bar_length
     #    Chord :[
-    #            Root        -> [ '7' ->  '1~7' ,                                 #-> full size
-    #            pitch       ->   '♯'|'♭'|'' ,                                       #-> 1/2 size
-    #            Quality    ->  'm, aug, dim, alt' ]                         #-> 1/2 size
+    #            Root        -> [ '7' ->  '1~7' ,     #-> full size
+    #            pitch       ->   '♯'|'♭'|'' ,       #-> 1/2 size
+    #            Quality    ->  'm, aug, dim, alt' ]  #-> 1/2 size
     #            Intrval      ->  'sus, sus4, 7, 11, 6, 9, 13' .etc... , #-> 1/3 size
-    #            Bass        ->['4','♭'] ,                                           #-> 1/2 size bold
-    #            Lengh    -> frac(x,y)                                            #->  (<basetick *> / (m of <n/m>) ) ???<= confuse now....
+    #            Bass        ->['4','♭'] ,            #-> 1/2 size bold
+    #            Lengh    -> frac(x,y)                #->  (<basetick *> / (m of <n/m>) ) ???<= confuse now....
     #            ]
     #
-
+'''
 
 if __name__ == '__main__':
     main()
