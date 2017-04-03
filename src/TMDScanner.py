@@ -58,9 +58,9 @@ def PartsContainsChord(PRTCNT):
     L = []
     for p in PRTCNT:
         if p[1] == 'CHORD':
-            if p[2] != '|0|':
-                print('any CHORD part should started with |0|!')
-                sys.exit('syntax error')
+            if p[2] not in ['|0|', '']:
+                print('any CHORD part should started with |0| or none!')
+                exit('syntax error')
             else:
                 L.append(p)
     return L
@@ -95,9 +95,12 @@ def SignatureGetter(inputFile):
 
 
 def ChordListGetter(PartsContainsChord):
-    print(PartsContainsChord)  # debug
+
+    for i in PartsContainsChord:    # debug    
+        print(i)                    # debug
+
     # return a tuple ('base', ''StringWithChords)
-    CHORDPartStringPattern = r"\<(?P<Base>[12348][26]?)\*\>(?P<ChordString>[^<$]+)"
+    CHORDPartStringPattern = r"\<(?P<Base>[012348][26]?)\*\>(?P<ChordString>[^<$]+)"
     CHORDStringPattern = r"(?P<Chord>\[[1-7][^\]]*\]\-*)"
     CHORDBassAndQualityPattern = r"(?P<Bass>[1-7]['|,]?)(?P<Quality>[^\]]*)"
     # put a "<4*>[1][6m][4][5][1][5][1]-" to split tickBase and chord string
