@@ -12,7 +12,7 @@ ReservedInstrumet = set({'CHORD', 'GROOVE'})
 InstrumentSet = set()
 PartSet = set()
 Key = ''            # default key is C
-Tempo = 120.0         # default tempo 120
+Tempo = 120.0       # default tempo 120
 SongName = ''       # defult no name
 Signature = [4, 4]  # defult to 4/4
 PartsContent = []
@@ -37,25 +37,15 @@ def FileChecker(ARGV):
         return True
 
 
-def Surface(NAME, TYPE, Size):
+def Surface(NAME, Size):
     # NAME: Song Name (with page#?)
-    # TYPE: {PDF, SVG}
+    # TYPE: {PDF}
     # Size: {A3, A4, B4, B3}
-    if TYPE == 'PDF':
-        surface, ext = cairo.PDFSurface, '.pdf'
-    return cairo.Context(surface(NAME + ext, Size[0], Size[1]))
+    if Size == '':
+        Size = 'A4'
+    return cairo.Context(surface(NAME + '.pdf', Size))
 
 
-def PartsContainsChord(PRTCNT):
-    L = []
-    for p in PRTCNT:
-        if p[1] == 'CHORD':
-            if p[2] != '|0|':
-                print('any CHORD part should started with |0|!')
-                sys.exit('syntax error')
-            else:
-                L.append(p)
-    return L
 
 
 def main():
@@ -81,7 +71,7 @@ def main():
     # done Confirming Pass 1
     #      Confirming Pass 2
     #      for Chord First
-    Scan.ChordListGetter(PartsContainsChord(PartsContent))
+    Scan.ChordListGetter(Scan.PartsContainsChord(PartsContent))
 '''
     #  [["6", "♯", "m"], "7-5", ["3", "♭"],  [1, 0.5]]
     #  means 6♯m7-5/3♭ (bass on 3,) with 1 bar before and place at 0.5 * bar_length

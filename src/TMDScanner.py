@@ -54,7 +54,16 @@ def PartContentGetter(inputFile):
 
     return [strip(m) for m in re.findall(PartContentPattern, inputFile)]
 
-
+def PartsContainsChord(PRTCNT):
+    L = []
+    for p in PRTCNT:
+        if p[1] == 'CHORD':
+            if p[2] != '|0|':
+                print('any CHORD part should started with |0|!')
+                sys.exit('syntax error')
+            else:
+                L.append(p)
+    return L
 def PartSetGetter(PartContentList):
     return set(match[0] for match in PartContentList)
 
@@ -91,7 +100,7 @@ def ChordListGetter(PartsContainsChord):
     CHORDPartStringPattern = r"\<(?P<Base>[12348][26]?)\*\>(?P<ChordString>[^<$]+)"
     CHORDStringPattern = r"(?P<Chord>\[[1-7][^\]]*\]\-*)"
     CHORDBassAndQualityPattern = r"(?P<Bass>[1-7]['|,]?)(?P<Quality>[^\]]*)"
-    # put a "<4*>[1][6m][4][5][1][5][1]-" to split tickBase and chorda string
+    # put a "<4*>[1][6m][4][5][1][5][1]-" to split tickBase and chord string
     BaseAndChordStrPattern = r"(\<(1|2|4|8|16|32)\*>)([^\<|$]+ )"
 
     pass
