@@ -18,7 +18,7 @@ a markup language for sequent event like **band style music score** or **show ru
     ```
     ./configure --enable-quartz=no --enable-quartz-font=no --enable-quartz-image=no
     ```
-
+    (bug has been fix and push into mainstream)
 
 ### for macOS(中文)
 
@@ -28,4 +28,5 @@ a markup language for sequent event like **band style music score** or **show ru
     ```
     ./configure --enable-quartz=no --enable-quartz-font=no --enable-quartz-image=no
     ```
+    (bug has been fix and push into mainstream)
 
