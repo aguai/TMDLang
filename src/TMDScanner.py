@@ -10,6 +10,7 @@ TempoPattern = r"\s*?\!\s*?\=\s*?(\d\d\d?\.?\d?\d?)\s*?\n"
 KeyPattern = r"\s*?\?\s*\=\s*(?P<Key>[ABCDEFGabcdefg][',]?m?)\s*?\n"
 SignaturePattern = r"\<(?P<BeatsPerBar>\d\d?)\/(?P<TickBase>\d\d?)\>\s*[\n\r]"
 
+
 def CommitStripper(strn):
     '''
     remove commits
@@ -56,14 +57,15 @@ def PartContentGetter(inputFile):
 
 
 def PartsContainsChord(PRTCNT):
+    L = []
     for p in PRTCNT:
         if p[1] == 'CHORD':
             if p[2] not in ['|0|', '']:
                 print('any CHORD part should started with |0| or none!')
                 exit('syntax error')
             else:
-
                 L.append(p)
+    return L
 
 
 def PartSetGetter(PartContentList):
@@ -94,10 +96,10 @@ def SignatureGetter(inputFile):
 
     else:
         return (int(Sig[0][0]), int(Sig[0][1]))
-    for i in PartsContainsChord:    # debug
 
 
 def ChordListGetter(PartsContainsChord):
+
     for i in PartsContainsChord:    # debug
         print(i)                    # debug
 
@@ -127,9 +129,9 @@ def ChordListGetter(PartsContainsChord):
     # Out[11]: ['Ending', 'CHORD', '|0|', '<4*>[1]-[1sus4][1maj7][3]-[3sus4][3][4]-[4/2][4][4m]-[6,][7,]<1*>[1]-[1/5]-[1]-[1][1]']
     # =========================================================================================
     # find Partname
-    #
+    #@ pseudo code
     #   def makeCHORDList('<4*>[1]-[1sus4][1maj7][3]-[3sus4][3][4]-[4/2][4][4m]-[6,][7,]<1*>[1]-[1/5]-[1]-[1][1]' -> strContains Chords):
-    #       return {item[0]:makeCHORDList(item[3])}
+    #       blah blah blah
     #       return CHORDList
     #
     #   for item in PartsContainsChord:
