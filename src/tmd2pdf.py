@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 import TMDDrawer as Draw
 from fractions import Fraction as frac
-import cairocffi as cairo
+import cairo
 ''' necessary variables '''
 ReservedInstrument = set({'CHORD', 'GROOVE'})
 InstrumentSet = set()
@@ -46,8 +46,6 @@ def Surface(NAME, Size):
     return cairo.Context(surface(NAME + '.pdf', Size))
 
 
-
-
 def main():
     ARGV = sys.argv
 
@@ -72,6 +70,8 @@ def main():
     #      Confirming Pass 2
     #      for Chord First
     Scan.ChordListGetter(Scan.PartsContainsChord(PartsContent))
+
+
 '''
     #  [["6", "♯", "m"], "7-5", ["3", "♭"],  [1, 0.5]]
     #  means 6♯m7-5/3♭ (bass on 3,) with 1 bar before and place at 0.5 * bar_length
