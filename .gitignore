@@ -95,6 +95,10 @@ ENV/
 # nuitka build 
 tmd.build/
 
+# costum
+.gitignore
 .DS_Store
 .history/*
 .history/
+test/
+test/*
