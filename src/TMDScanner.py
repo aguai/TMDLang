@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import re
 from sys import exit
 from fractions import Fraction as frac
