@@ -7,8 +7,8 @@ from pathlib import Path
 import TMDDrawer as Draw
 from fractions import Fraction as frac
 import cairocffi as cairo
-''' necessery variables '''
-ReservedInstrumet = set({'CHORD', 'GROOVE'})
+''' necessary variables '''
+ReservedInstrument = set({'CHORD', 'GROOVE'})
 InstrumentSet = set()
 PartSet = set()
 Key = ''            # default key is C
@@ -81,7 +81,7 @@ def main():
     #            Quality    ->  'm, aug, dim, alt' ]  #-> 1/2 size
     #            Intrval      ->  'sus, sus4, 7, 11, 6, 9, 13' .etc... , #-> 1/3 size
     #            Bass        ->['4','♭'] ,            #-> 1/2 size bold
-    #            Lengh    -> frac(x,y)                #->  (<basetick *> / (m of <n/m>) ) ???<= confuse now....
+    #            Length    -> frac(x,y)                #->  (<basetick *> / (m of <n/m>) ) ???<= confuse now....
     #            ]
     #
 '''
