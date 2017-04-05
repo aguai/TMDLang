@@ -100,5 +100,3 @@ tmd.build/
 .DS_Store
 .history/*
 .history/
-test/
-test/*
