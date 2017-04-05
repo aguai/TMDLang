@@ -9,7 +9,9 @@ func main() {
 	surface.SetSourceRGB(0, 0, 0)
 	surface.MoveTo(10.0, 50.0)
 	surface.ShowText("𝄐1m")
-	surface.CopyPage()
+	surface.ShowPage()
+	surface.MoveTo(10.0, 50.0)
+	surface.ShowText("𝄐2sus4")
 	surface.ShowPage()
 	surface.Finish()
 }
