@@ -1,5 +1,3 @@
-#!/usr/local/bin/env python3
-# -*- coding: utf8 -*-
 import TMDScanner as Scan
 import re
 import sys
@@ -37,13 +35,13 @@ def FileChecker(ARGV):
         return True
 
 
-def Surface(NAME, Size):
+# def Surface(NAME, Size):
     # NAME: Song Name (with page#?)
     # TYPE: {PDF}
     # Size: {A3, A4, B4, B3}
-    if Size == '':
-        Size = 'A4'
-    return cairo.Context(surface(NAME + '.pdf', Size))
+#    if Size == '':
+#        Size = 'A4'
+#    return cairo.Context(surface(NAME + '.pdf', Size))
 
 
 def main():
