@@ -12,4 +12,7 @@ B3 = [3248.0, 4300.0]
 def ChordBuilder(Chord):
     ChordFormRegex = re.compile(
         r"\[(?P<Root>[1-7]('|,)?)(?P<Tonic>(m|aug|dim))?(P<Ext>(Maj|sus|alt))?(?P<TensionNote>(\S*))?\]")
-    list(re.finditer(ChordFormRegex, Chord))[0].groupdict()
+    return list(re.finditer(ChordFormRegex, Chord))[0].groupdict()
+
+for i in testStrList:
+    print(ChordBuilder(i))
