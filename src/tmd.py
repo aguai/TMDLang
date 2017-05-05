@@ -1,15 +1,12 @@
+from pathlib import Path
 import TMDScanner as Scan
 import re
 import sys
-from pathlib import Path
-import TMDDrawer as Draw
-from fractions import Fraction as frac
-import cairo
 ''' necessary variables '''
 ReservedInstrument = set({'CHORD', 'GROOVE'})
 InstrumentSet = set()
 PartSet = set()
-Key = ''            # default key is C
+Key = 'C'            # default key is C
 Tempo = 120.0       # default tempo 120
 SongName = ''       # defult no name
 Signature = [4, 4]  # defult to 4/4
@@ -49,9 +46,8 @@ def main():
 
     # Checking File Head #
 
-    if FileChecker(ARGV) == False:
+    if not FileChecker(ARGV):
         sys.exit('File Type Error')
-    # done Checking File Head #
 
     # done Checking Header
     InputFile = open(ARGV[1], 'r').read()
@@ -59,30 +55,20 @@ def main():
     Tempo = float(Scan.TempoGetter(InputFile))
     Signature = Scan.SignatureGetter(InputFile)
     SongName = Scan.SongNameGetter(InputFile)
+
     PartsContent = Scan.PartContentGetter(InputFile)
+    print('PartsContent:\n')  # debug
+    for i in PartsContent:  # debug
+        print(i)            # debug
+    print('\n\n')           # debug
     PartNameList = Scan.PartSequenceGetter(InputFile)
+
+    print('PartNameList:\n', PartNameList, '\n\n')  # debug
     PartSet = Scan.PartSetGetter(PartsContent)
     InstrumentSet = Scan.InstrumentSetGetter(PartsContent)
 
-    # done Confirming Pass 1
-    #      Confirming Pass 2
-    #      for Chord First
     Scan.ChordListGetter(Scan.PartsContainsChord(PartsContent))
 
-
-'''
-    #  [["6", "♯", "m"], "7-5", ["3", "♭"],  [1, 0.5]]
-    #  means 6♯m7-5/3♭ (bass on 3,) with 1 bar before and place at 0.5 * bar_length
-    #    Chord :[
-    #            Root        -> [ '7' ->  '1~7' ,     #-> full size
-    #            pitch       ->   '♯'|'♭'|'' ,       #-> 1/2 size
-    #            Quality    ->  'm, aug, dim, alt' ]  #-> 1/2 size
-    #            Intrval      ->  'sus, sus4, 7, 11, 6, 9, 13' .etc... , #-> 1/3 size
-    #            Bass        ->['4','♭'] ,            #-> 1/2 size bold
-    #            Length    -> frac(x,y)                #->  (<basetick *> / (m of <n/m>) ) ???<= confuse now....
-    #            ]
-    #
-'''
 
 if __name__ == '__main__':
     main()

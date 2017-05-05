@@ -1,6 +1,7 @@
 import re
 
-regex = r"\[(?P<Root>[1-7]('|,)?)(?P<Tonic>(m|aug|dim))?(P<Ext>(Maj|sus|alt))?(?P<TensionNote>(\S*))?\]"
+regex = re.compile(
+    "\[(?P<Root>[1-7]('|,)?)(?P<Tonic>(m|aug|dim))?(P<Ext>(Maj|sus|alt))?(?P<TensionNote>(\S*))?\]")
 
 test_str = ("[1sus4]\n"
             "[1mMaj7]\n"
@@ -13,6 +14,7 @@ test_str = ("[1sus4]\n"
             "[1aug]")
 
 matches = re.finditer(regex, test_str)
+matcheslist = list(matches)
 
 for matchNum, match in enumerate(matches):
     matchNum = matchNum + 1
@@ -25,3 +27,4 @@ for matchNum, match in enumerate(matches):
 
         print("Group {groupNum} found at {start}-{end}: {group}".format(groupNum=groupNum,
                                                                         start=match.start(groupNum), end=match.end(groupNum), group=match.group(groupNum)))
+print([m.groupdict() for m in regex.finditer(test_str)])

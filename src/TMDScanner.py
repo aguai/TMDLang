@@ -1,13 +1,14 @@
 import re
 from sys import exit
-from fractions import Fraction as frac
-########################## Pass 1 ########################################
-PartSequencePattern = r"\-\>([^\#]+)->\#"
-PartContentPattern = r"(?P<partname>\S+?)?:(?P<InstrumentName>\S+?)?@\[(?P<Timing>\S+?)?\]\{\s+?(?P<PartContent>[^\}]+)\}"
-SongNamePattern = r"\s*\*\*\s+?(?P<SongName>[^\*]+)\s+?\*\*\s*"
-TempoPattern = r"\s*?\!\s*?\=\s*?(\d\d\d?\.?\d?\d?)\s*?\n"
-KeyPattern = r"\s*?\?\s*\=\s*(?P<Key>[ABCDEFGabcdefg][',]?m?)\s*?\n"
-SignaturePattern = r"\<(?P<BeatsPerBar>\d\d?)\/(?P<TickBase>\d\d?)\>\s*[\n\r]"
+
+PartSequencePattern = re.compile("\-\>([^\#]+)->\#")
+PartContentPattern = re.compile(
+    "(?P<partname>\S+?)?:(?P<InstrumentName>\S+?)?@\[(?P<Timing>\S+?)?\]\{\s+?(?P<PartContent>[^\}]+)\}")
+SongNamePattern = re.compile("\s*\*\*\s+?(?P<SongName>[^\*]+)\s+?\*\*\s*")
+TempoPattern = re.compile("\s*?\!\s*?\=\s*?(\d\d\d?\.?\d?\d?)\s*?\n")
+KeyPattern = re.compile("\s*?\?\s*\=\s*(?P<Key>[ABCDEFGabcdefg][',]?m?)\s*?\n")
+SignaturePattern = re.compile(
+    "\<(?P<BeatsPerBar>\d\d?)\/(?P<TickBase>\d\d?)\>\s*[\n\r]")
 
 
 def CommitStripper(strn):
@@ -46,13 +47,26 @@ def SongNameGetter(inputFile):
 def PartContentGetter(inputFile):
     '''
     to collect all the part content and instrument content
+
+
     '''
-    def strip(match):
+#    print(inputFile, '\n\n=== input file above ===\n\n')  # debug
+
+    def stripthis(match):
         match = list(match)
         match[3] = CommitStripper(FormaterStripper(match[3]))
         return match
 
-    return [strip(m) for m in re.findall(PartContentPattern, inputFile)]
+    for i in [m.groupdict() for m in re.finditer(PartContentPattern, inputFile)]:
+        print("%s::%s=>%s:\n%s\n" %
+              (i['partname'], i['InstrumentName'],
+               i['Timing'],
+               re.sub(r"\/\*[^\*]+\*\/", '',
+                      i['PartContent']).replace(
+                   ' ', '').replace('\n', '').replace('|', '').replace('\t', '').replace('\r', '')
+
+               ))
+    return [stripthis(m) for m in re.findall(PartContentPattern, inputFile)]
 
 
 def PartsContainsChord(PRTCNT):
@@ -64,6 +78,9 @@ def PartsContainsChord(PRTCNT):
                 exit('syntax error')
             else:
                 L.append(p)
+    print('in TMDScanner:\n\tParts Contain Chord is:')  # debug
+    for i in L:  # debug
+        print('\t==>', i)  # debug
     return L
 
 
@@ -98,40 +115,11 @@ def SignatureGetter(inputFile):
 
 
 def ChordListGetter(PartsContainsChord):
-
-    for i in PartsContainsChord:    # debug
-        print(i)                    # debug
-
-    # return a tuple ('base', ''StringWithChords)
-    CHORDPartStringPattern = r"\<(?P<Base>[012348][26]?)\*\>(?P<ChordString>[^<$]+)"
-    CHORDStringPattern = r"(?P<Chord>\[[1-7][^\]]*\]\-*)"
-    CHORDBassAndQualityPattern = r"(?P<Bass>[1-7]['|,]?)(?P<Quality>[^\]]*)"
-    # put a "<4*>[1][6m][4][5][1][5][1]-" to split tickBase and chord string
-    BaseAndChordStrPattern = r"(\<(1|2|4|8|16|32)\*>)([^\<|$]+ )"
+    CHORDPartStringPattern = re.compile(
+        "\<(?P<Base>[1|2|4|8|16]?)\*\>(?P<ChordString>[^<$]+)")
+    CHORDStringPattern = re.compile("(?P<Chord>\[[1-7][^\]]*\]\-*)")
+    CHORDBassAndQualityPattern = re.compile(
+        "(?P<Bass>[1-7]['|,]?)(?P<Quality>[^\]]*)")
+    BaseAndChordStrPattern = re.compile("(\<(1|2|4|8|16|32)\*>)([^\<|$]+ )")
 
     pass
-    # return [{'PartName':[ CHORD, CHORD, CHORD, CHORD, CHORD, CHORD, CHORD]}, {}'PartName':[CHORD, CHORD, CHORD, CHORD, CHORD, CHORD, CHORD],... ]
-    # which PartName is PartsContainsChord[i][0] and Chord is combine with signature and 'string'
-    #  [["6", "♯", "m"], "7-5", ["3", "♭"],  [1, 0.5]]  # means 6♯m7-5/3♭ (bass on 3,) with 1 bar before and place at 0.5 * bar_length
-    #    Chord :[
-    #            Root        -> [ '7' ->  '1~7' ,                                 #-> full size
-    #            pitch       ->   '♯'|'♭'|'' ,                                       #-> 1/2 size
-    #            Quality    ->  'm, aug, dim, alt' ]                         #-> 1/2 size
-    #            Intrval      ->  'sus, sus4, 7, 11, 6, 9, 13' .etc... , #-> 1/3 size
-    #            Bass        ->['4','♭'] ,                                           #-> 1/2 size bold
-    #            Lengh    -> frac(x,y)                                            #-> confuse now
-    #            ]
-    #
-    # In [10]: [int(re.findall(r"(\<(1|2|4|8|16|32)\*>)([^\<|$]+)" , opc[3])[0][1]), re.findall(r"(\<(1|2|4|8|16|32)\*>)([^\<|$]+ )" , opc[3])[0][2]]
-    # Out[10]: [4, '[1]-[1sus4][1maj7][3]-[3sus4][3][4]-[4/2][4][4m]-[6,][7,]']
-    # In [11]: opc
-    # Out[11]: ['Ending', 'CHORD', '|0|', '<4*>[1]-[1sus4][1maj7][3]-[3sus4][3][4]-[4/2][4][4m]-[6,][7,]<1*>[1]-[1/5]-[1]-[1][1]']
-    # =========================================================================================
-    # find Partname
-    #@ pseudo code
-    #   def makeCHORDList('<4*>[1]-[1sus4][1maj7][3]-[3sus4][3][4]-[4/2][4][4m]-[6,][7,]<1*>[1]-[1/5]-[1]-[1][1]' -> strContains Chords):
-    #       blah blah blah
-    #       return CHORDList
-    #
-    #   for item in PartsContainsChord:
-    #       return {item[0]:makeCHORDList(item[3])}
