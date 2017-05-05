@@ -47,49 +47,49 @@ def SongNameGetter(inputFile):
 def PartContentGetter(inputFile):
     '''
     to collect all the part content and instrument content
-
-
     '''
-#    print(inputFile, '\n\n=== input file above ===\n\n')  # debug
+    LL = [m.groupdict() for m in re.finditer(PartContentPattern, inputFile)]
 
-    def stripthis(match):
-        match = list(match)
-        match[3] = CommitStripper(FormaterStripper(match[3]))
-        return match
+    for i in LL:
+        i['PartContent'] = re.sub(r"\/\*[^\*]+\*\/", '',
+                                  i['PartContent'].replace(' ', '').replace('\n', '').replace('|', '').replace('\t', '').replace('\r', ''))
 
-    for i in [m.groupdict() for m in re.finditer(PartContentPattern, inputFile)]:
-        print("%s::%s=>%s:\n%s\n" %
-              (i['partname'], i['InstrumentName'],
-               i['Timing'],
-               re.sub(r"\/\*[^\*]+\*\/", '',
-                      i['PartContent']).replace(
-                   ' ', '').replace('\n', '').replace('|', '').replace('\t', '').replace('\r', '')
-
-               ))
-    return [stripthis(m) for m in re.findall(PartContentPattern, inputFile)]
+    return LL
 
 
 def PartsContainsChord(PRTCNT):
     L = []
+    # print('in PartsContainsChord:\n')
     for p in PRTCNT:
-        if p[1] == 'CHORD':
-            if p[2] not in ['|0|', '']:
+        # print(p)
+        if p['InstrumentName'] == 'CHORD':
+            if p['Timing'] not in ['|0|', '']:
                 print('any CHORD part should started with |0| or none!')
                 exit('syntax error')
             else:
                 L.append(p)
-    print('in TMDScanner:\n\tParts Contain Chord is:')  # debug
-    for i in L:  # debug
-        print('\t==>', i)  # debug
+    # print('in TMDScanner:\nParts Contain Chord is:')  # debug
+    # for i in L:  # debug
+    #    print(i['partname'], ':', i['PartContent'])  # debug
     return L
 
 
-def PartSetGetter(PartContentList):
-    return set(match[0] for match in PartContentList)
+def PartSetGetter(PartContentDict):
+    SetOfPartname = set()
+    # print('PartSetGetter:')
+    for i in PartContentDict:
+        # print(i['partname'])
+        SetOfPartname.add(i['partname'])
+    # print(SetOfPartname)
+    return SetOfPartname
 
 
 def InstrumentSetGetter(PartContentList):
-    return set(match[1] for match in PartContentList)
+    SetOfInstument = set()
+    for i in PartContentList:
+        SetOfInstument.add(i['InstrumentName'])
+    # print(SetOfInstument)
+    return SetOfInstument
 
 
 def PartSequenceGetter(inputFile):
@@ -103,7 +103,7 @@ def PartSequenceGetter(inputFile):
 def SignatureGetter(inputFile):
     Sig = re.findall(SignaturePattern, inputFile)
     if len(Sig) == 0:
-        print('signature set to default 4/4')
+        # print('signature set to default 4/4')
         return (4, 4)
 
     elif Sig[0][1] not in {'1', '2', '4', '8', '16', '32'}:
@@ -115,11 +115,22 @@ def SignatureGetter(inputFile):
 
 
 def ChordListGetter(PartsContainsChord):
-    CHORDPartStringPattern = re.compile(
-        "\<(?P<Base>[1|2|4|8|16]?)\*\>(?P<ChordString>[^<$]+)")
-    CHORDStringPattern = re.compile("(?P<Chord>\[[1-7][^\]]*\]\-*)")
-    CHORDBassAndQualityPattern = re.compile(
-        "(?P<Bass>[1-7]['|,]?)(?P<Quality>[^\]]*)")
-    BaseAndChordStrPattern = re.compile("(\<(1|2|4|8|16|32)\*>)([^\<|$]+ )")
+    #   CHORDPartStringPattern = re.compile(
+    #       "\<(?P<Base>[1|2|4|8|16]?)\*\>(?P<ChordString>[^<$]+)")
+    #   CHORDStringPattern = re.compile("(?P<Chord>\[[1-7][^\]]*\]\-*)")
+    #   CHORDBassAndQualityPattern = re.compile(
+    #       "(?P<Bass>[1-7]['|,]?)(?P<Quality>[^\]]*)")
+    #   BaseAndChordStrPattern = re.compile("(\<(1|2|4|8|16|32)\*>)([^\<|$]+ )")
+    # print(PartsContainsChord)  # debug
+    XX = []
+    re4Content = re.compile(
+        r"(?P<TimeBase>\<[1|2|4|8|16|32]\*\>)(?P<ChordString>[^<$]+)")
+    re4ChordLengh = re.compile(r"(?P<FullChord>\[[^\]]+\])(?P<dash>\-*)")
+    for i in PartsContainsChord:
+        print('\n=== === ===', i['partname'] + ':')
+        for j in re4Content.findall(i['PartContent']):
+            print(j[0] + ':==>')
+            for k in re4ChordLengh.findall(j[1]):
+                print(k[0] + ':', len(k[1]) + 1)
 
     pass

@@ -57,13 +57,7 @@ def main():
     SongName = Scan.SongNameGetter(InputFile)
 
     PartsContent = Scan.PartContentGetter(InputFile)
-    print('PartsContent:\n')  # debug
-    for i in PartsContent:  # debug
-        print(i)            # debug
-    print('\n\n')           # debug
     PartNameList = Scan.PartSequenceGetter(InputFile)
-
-    print('PartNameList:\n', PartNameList, '\n\n')  # debug
     PartSet = Scan.PartSetGetter(PartsContent)
     InstrumentSet = Scan.InstrumentSetGetter(PartsContent)
 
