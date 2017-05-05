@@ -115,22 +115,31 @@ def SignatureGetter(inputFile):
 
 
 def ChordListGetter(PartsContainsChord):
-    #   CHORDPartStringPattern = re.compile(
-    #       "\<(?P<Base>[1|2|4|8|16]?)\*\>(?P<ChordString>[^<$]+)")
-    #   CHORDStringPattern = re.compile("(?P<Chord>\[[1-7][^\]]*\]\-*)")
-    #   CHORDBassAndQualityPattern = re.compile(
-    #       "(?P<Bass>[1-7]['|,]?)(?P<Quality>[^\]]*)")
-    #   BaseAndChordStrPattern = re.compile("(\<(1|2|4|8|16|32)\*>)([^\<|$]+ )")
-    # print(PartsContainsChord)  # debug
     XX = []
     re4Content = re.compile(
         r"(?P<TimeBase>\<[1|2|4|8|16|32]\*\>)(?P<ChordString>[^<$]+)")
     re4ChordLengh = re.compile(r"(?P<FullChord>\[[^\]]+\])(?P<dash>\-*)")
     for i in PartsContainsChord:
-        print('\n=== === ===', i['partname'] + ':')
+        # print('\n=== === ===  ', i['partname'] + '\t=== === ===\n')
+        TT = {i['partname']: []}
         for j in re4Content.findall(i['PartContent']):
-            print(j[0] + ':==>')
             for k in re4ChordLengh.findall(j[1]):
-                print(k[0] + ':', len(k[1]) + 1)
+                TT[i['partname']].append((
+                    j[0],
+                    k[0],
+                    len(k[1]) + 1
+                )
+                )
+        XX.append(TT)
 
-    pass
+    for iii in XX:
+        for ii in iii:
+            print(ii, ':')
+            for jj in iii[ii]:
+                print(jj)
+    #.append(
+    #    ({"chord": str(k[0].rstrip(']').lstrip('['))},
+    #
+    #     {"length": ((len(k[1]) + 1) * 96 /
+    #                 int(j[0].rstrip('>').rstrip('*').lstrip('<')))}
+    # )
