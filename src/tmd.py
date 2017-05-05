@@ -61,8 +61,12 @@ def main():
     PartSet = Scan.PartSetGetter(PartsContent)
     InstrumentSet = Scan.InstrumentSetGetter(PartsContent)
 
-    print(Scan.ChordListGetter(Scan.PartsContainsChord(PartsContent)))
-
+    for jjj in Scan.ChordListGetter(Scan.PartsContainsChord(PartsContent)):  # debug
+        for itit in jjj:  # debug
+            print(itit, ':')  # debug
+            for i in jjj[itit]:  # debug
+                print(i)  # debug
+        print('')  # debug
 
 if __name__ == '__main__':
     main()
