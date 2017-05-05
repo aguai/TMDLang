@@ -1,6 +1,6 @@
 ::SCORE::
 
-Intro:CHORD@[|0|]{
+Intro:CHORD@{
 <4*>
 	[1]  	-  	-  	- 
 	[1sus4] -  
@@ -13,7 +13,7 @@ Intro:CHORD@[|0|]{
 	[6,]  	-    
 	[7,]	-
 }
-A:CHORD@[|0|]{
+A:CHORD@{
 <4*>
 	[1]  	-  	-  	- 
 	[1sus4] -  [1] 	-
@@ -34,7 +34,7 @@ A:CHORD@[|0|]{
 	[4m] -  -	- 
 
 }
-B:CHORD@[|0|]{
+B:CHORD@{
 <4*>
 	[1]  	-  	-  	- 
 	[1sus4] -  [1] 	-
@@ -55,7 +55,7 @@ B:CHORD@[|0|]{
 	[4m] -  -	- 
 
 }
-Ending:CHORD@[|0|]{
+Ending:CHORD@{
 <4*>
 	[1]  	-  	-  	- 
 	[1sus4] -  

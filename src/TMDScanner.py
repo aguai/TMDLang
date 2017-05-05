@@ -3,7 +3,7 @@ from sys import exit
 
 PartSequencePattern = re.compile("\-\>([^\#]+)->\#")
 PartContentPattern = re.compile(
-    "(?P<partname>\S+?)?:(?P<InstrumentName>\S+?)?@\[(?P<Timing>\S+?)?\]\{\s+?(?P<PartContent>[^\}]+)\}")
+    r"(?P<partname>\S*)?:(?P<InstrumentName>\S*)@(?P<Timing>[^\{]*)\{(?P<PartContent>[^}]+)\}")
 SongNamePattern = re.compile("\s*\*\*\s+?(?P<SongName>[^\*]+)\s+?\*\*\s*")
 TempoPattern = re.compile("\s*?\!\s*?\=\s*?(\d\d\d?\.?\d?\d?)\s*?\n")
 KeyPattern = re.compile("\s*?\?\s*\=\s*(?P<Key>[ABCDEFGabcdefg][',]?m?)\s*?\n")
@@ -59,18 +59,13 @@ def PartContentGetter(inputFile):
 
 def PartsContainsChord(PRTCNT):
     L = []
-    # print('in PartsContainsChord:\n')
     for p in PRTCNT:
-        # print(p)
         if p['InstrumentName'] == 'CHORD':
-            if p['Timing'] not in ['|0|', '']:
+            if p['Timing'] != '' and p['Timing'] != '|0|':
                 print('any CHORD part should started with |0| or none!')
                 exit('syntax error')
             else:
                 L.append(p)
-    # print('in TMDScanner:\nParts Contain Chord is:')  # debug
-    # for i in L:  # debug
-    #    print(i['partname'], ':', i['PartContent'])  # debug
     return L
 
 
@@ -115,6 +110,7 @@ def SignatureGetter(inputFile):
 
 
 def ChordListGetter(PartsContainsChord):
+    # print(PartsContainsChord)#debug
     XX = []
     re4Content = re.compile(
         r"(?P<TimeBase>\<[1|2|4|8|16|32]\*\>)(?P<ChordString>[^<$]+)")
@@ -124,22 +120,7 @@ def ChordListGetter(PartsContainsChord):
         TT = {i['partname']: []}
         for j in re4Content.findall(i['PartContent']):
             for k in re4ChordLengh.findall(j[1]):
-                TT[i['partname']].append((
-                    j[0],
-                    k[0],
-                    len(k[1]) + 1
-                )
-                )
+                TT[i['partname']].append((k[0], j[0], len(k[1]) + 1))
         XX.append(TT)
 
-    for iii in XX:
-        for ii in iii:
-            print(ii, ':')
-            for jj in iii[ii]:
-                print(jj)
-    #.append(
-    #    ({"chord": str(k[0].rstrip(']').lstrip('['))},
-    #
-    #     {"length": ((len(k[1]) + 1) * 96 /
-    #                 int(j[0].rstrip('>').rstrip('*').lstrip('<')))}
-    # )
+    return XX
