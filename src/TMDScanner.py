@@ -11,18 +11,6 @@ SignaturePattern = re.compile(
     "\<(?P<BeatsPerBar>\d\d?)\/(?P<TickBase>\d\d?)\>\s*[\n\r]")
 
 
-def CommitStripper(strn):
-    '''
-    remove commits
-    '''
-    return re.sub(r"\/\*[^\*]+\*\/", '', strn)
-
-
-def FormaterStripper(strn):
-    ''' anything for format shall be trimed here'''
-    return strn.replace(' ', '').replace('\n', '').replace('|', '').replace('\t', '').replace('\r', '')
-
-
 def TempoGetter(inputFile):
     if len(re.findall(TempoPattern, inputFile)) != 1:
         return 120
@@ -32,7 +20,7 @@ def TempoGetter(inputFile):
 
 def KeyGetter(inputFile):
     if len(re.findall(KeyPattern, inputFile)) != 1:
-        return 'C'
+        return ''
     else:
         return re.findall(KeyPattern, inputFile)[0]
 
@@ -45,14 +33,11 @@ def SongNameGetter(inputFile):
 
 
 def PartContentGetter(inputFile):
-    '''
-    to collect all the part content and instrument content
-    '''
     LL = [m.groupdict() for m in re.finditer(PartContentPattern, inputFile)]
 
     for i in LL:
-        i['PartContent'] = re.sub(r"\/\*[^\*]+\*\/", '',
-                                  i['PartContent'].replace(' ', '').replace('\n', '').replace('|', '').replace('\t', '').replace('\r', ''))
+        i['PartContent'] = re.sub(r"\/\*[^\*]+\*\/", '', i['PartContent'].replace(
+            ' ', '').replace('\n', '').replace('|', '').replace('\t', '').replace('\r', ''))
 
     return LL
 

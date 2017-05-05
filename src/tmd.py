@@ -32,24 +32,12 @@ def FileChecker(ARGV):
         return True
 
 
-# def Surface(NAME, Size):
-    # NAME: Song Name (with page#?)
-    # TYPE: {PDF}
-    # Size: {A3, A4, B4, B3}
-#    if Size == '':
-#        Size = 'A4'
-#    return cairo.Context(surface(NAME + '.pdf', Size))
-
-
 def main():
     ARGV = sys.argv
-
-    # Checking File Head #
 
     if not FileChecker(ARGV):
         sys.exit('File Type Error')
 
-    # done Checking Header
     InputFile = open(ARGV[1], 'r').read()
     Key = Scan.KeyGetter(InputFile)
     Tempo = float(Scan.TempoGetter(InputFile))
