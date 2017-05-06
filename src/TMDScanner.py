@@ -75,7 +75,8 @@ def InstrumentSetGetter(PartContentList):
 def PartSequenceGetter(inputFile):
     if len(re.findall(PartSequencePattern, inputFile)) == 1:
         TempList = re.findall(PartSequencePattern, inputFile)[0].split('->')
-        return [FormaterStripper(item) for item in TempList]
+        return [re.sub(r"\/\*[^\*]+\*\/", '', item.replace(
+            ' ', '').replace('\n', '').replace('|', '').replace('\t', '').replace('\r', '')) for item in TempList]
     else:
         return []
 
