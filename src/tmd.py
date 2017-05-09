@@ -63,7 +63,7 @@ def main():
             for i in range(len(ttlist)):
                 WholePartLength += ttlist[i][1] * ttlist[i][2]
                 if i == 0:
-                    print('Space Before Chord %s\n\tis is 0 of bar' %
+                    print('Space Before Chord %s\n\tis 0 of bar' %
                           str(ttlist[i][0]))
                 else:
                     SpaceBeforeChord += ttlist[i - 1][1] * ttlist[i - 1][2]
