@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from pathlib import Path
 import TMDScanner as Scan
 import re
@@ -49,12 +50,29 @@ def main():
     PartSet = Scan.PartSetGetter(PartsContent)
     InstrumentSet = Scan.InstrumentSetGetter(PartsContent)
 
-    for jjj in Scan.ChordListGetter(Scan.PartsContainsChord(PartsContent)):  # debug
-        for itit in jjj:  # debug
-            print(itit, ':')  # debug
-            for i in jjj[itit]:  # debug
-                print(i)  # debug
+    # debug
+    for ChordsInEverPart in Scan.ChordListGetter(Scan.PartsContainsChord(PartsContent)):
+        for DictItemWhichKeyIsPartName in ChordsInEverPart:
+            print(DictItemWhichKeyIsPartName, ':')
+            ttlist = []
+            for i in ChordsInEverPart[DictItemWhichKeyIsPartName]:
+                ttlist.append(
+                    (i[0], 1 / int(i[1].rstrip('*>').lstrip('<')), i[2]))
+            SpaceBeforeChord = 0
+            WholePartLength = 0
+            for i in range(len(ttlist)):
+                WholePartLength += ttlist[i][1] * ttlist[i][2]
+                if i == 0:
+                    print('Space Before Chord %s\n\tis is 0 of bar' %
+                          str(ttlist[i][0]))
+                else:
+                    SpaceBeforeChord += ttlist[i - 1][1] * ttlist[i - 1][2]
+                    print('Space Before Chord %s\n\tis %s of bar' %
+                          (ttlist[i][0], SpaceBeforeChord))
+            print('\nthe whole length of \"[%s]\" is %s' % (
+                DictItemWhichKeyIsPartName, WholePartLength))
         print('')  # debug
+
 
 if __name__ == '__main__':
     main()
