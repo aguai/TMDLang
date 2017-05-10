@@ -22,11 +22,11 @@ def FileChecker(ARGV):
         print("usage:\n%s InputFile.tmd\n" % ARGV[0])
         return False
 
-    elif Path(ARGV[1]).is_file() != True:
+    elif not Path(ARGV[1]).is_file():
         print("there is no file named %s!" % ARGV[1])
         return False
 
-    elif re.search(MarkupTypePattern, open(ARGV[1], 'r').readline()) == None:
+    elif re.search(MarkupTypePattern, open(ARGV[1], 'r').readline()) is None:
         print("unknown filetype")
         return False
     else:
