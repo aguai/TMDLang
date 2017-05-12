@@ -19,12 +19,22 @@ ct.show_page()
 '''
 
 ctx = cairo.Context(cairo.PDFSurface("testpdf.pdf", 2480.0, 3508.0))
-ctx.set_font_size(80)
-ctx.select_font_face("Musica", cairo.FONT_SLANT_NORMAL,
+ctx.set_font_size(30)
+ctx.select_font_face("FreeSerif", cairo.FONT_SLANT_NORMAL,
                      cairo.FONT_WEIGHT_NORMAL)
 ctx.move_to(100, 100)
 ctx.show_text(chr(119056) + chr(119057) + '1ABCDEFGm')
 ctx.show_page()  # 每次 show_page 會製作一個新頁面
 ctx.move_to(100, 100)
 ctx.show_text(chr(119056) + chr(119057) + '2maj')
+ctx.move_to(100, 200)
+
+glyphs = []
+index = 0
+for y in range(20):
+    for x in range(35):
+        glyphs.append((index, x * 100 + 100, y * 50 + 50))
+        index += 1
+
+ctx.show_glyphs(glyphs)
 ctx.show_page()
