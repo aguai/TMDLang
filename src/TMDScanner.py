@@ -7,6 +7,9 @@ PartContentPattern = re.compile(
 SongNamePattern = re.compile("\s*\*\*\s+?(?P<SongName>[^\*]+)\s+?\*\*\s*")
 TempoPattern = re.compile("\s*?\!\s*?\=\s*?(\d\d\d?\.?\d?\d?)\s*?\n")
 KeyPattern = re.compile("\s*?\?\s*\=\s*(?P<Key>[ABCDEFGabcdefg][',]?m?)\s*?\n")
+PerChordPattern = re.compile(
+    "\[(?P<Root>[1-7])(?P<RootAccidental>['|,])?(?P<Tonic>maj|Maj|aug|dim|m|M)?(P<Ext>[sus|alt])?(?P<TensionNote>[^\]|^\/]*)?[\/]?(?P<Bass>[1-7])?(?P<BassAccidental>['|,])?\]")
+
 SignaturePattern = re.compile(
     "\<(?P<BeatsPerBar>\d\d?)\/(?P<TickBase>\d\d?)\>\s*[\n\r]")
 
@@ -110,3 +113,35 @@ def ChordListGetter(PartsContainsChord):
         XX.append(TT)
 
     return XX
+
+
+def PerChordSymbolAndPosition(PCTX):
+
+    for ChordsInEveryPart in ChordListGetter(PartsContainsChord(PCTX)):
+        for DictItemWhichKeyIsPartName in ChordsInEveryPart:
+            print(DictItemWhichKeyIsPartName, ':')
+            ListOfChordWithEveryPartContent = []
+            for i in ChordsInEveryPart[DictItemWhichKeyIsPartName]:
+                ListOfChordWithEveryPartContent.append(
+                    (i[0], 1 / int(i[1].rstrip('*>').lstrip('<')), i[2]))
+            SpaceBeforeChord = 0
+            WholePartLength = 0
+            for i in range(len(ListOfChordWithEveryPartContent)):
+                WholePartLength += ListOfChordWithEveryPartContent[i][1] * \
+                    ListOfChordWithEveryPartContent[i][2]
+                if i == 0:
+                    print('Space Before Chord %s\n===> 0 of bar' %
+                          ListOfChordWithEveryPartContent[i][0])
+                    print("Which The Chord Detail is\n===> %s" %
+                          [m.groupdict() for m in re.finditer(PerChordPattern, ListOfChordWithEveryPartContent[i][0])][0])
+                else:
+                    SpaceBeforeChord += ListOfChordWithEveryPartContent[i -
+                                                                        1][1] * ListOfChordWithEveryPartContent[i - 1][2]
+                    print('Space Before Chord %s\n===> %s of bar' %
+                          (ListOfChordWithEveryPartContent[i][0], SpaceBeforeChord))
+                    print("Which The Chord Detail is\n===> %s" %
+                          [m.groupdict() for m in re.finditer(PerChordPattern, ListOfChordWithEveryPartContent[i][0])][0])
+            print('\nthe whole length of \"[%s]\" is %s' % (
+                DictItemWhichKeyIsPartName, WholePartLength))
+        print('')
+        pass

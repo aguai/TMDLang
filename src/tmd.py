@@ -48,29 +48,7 @@ def main():
     PartNameList = Scan.PartSequenceGetter(InputFile)
     PartSet = Scan.PartSetGetter(PartsContent)
     InstrumentSet = Scan.InstrumentSetGetter(PartsContent)
-
-    # debug
-    for ChordsInEverPart in Scan.ChordListGetter(Scan.PartsContainsChord(PartsContent)):
-        for DictItemWhichKeyIsPartName in ChordsInEverPart:
-            print(DictItemWhichKeyIsPartName, ':')
-            ttlist = []
-            for i in ChordsInEverPart[DictItemWhichKeyIsPartName]:
-                ttlist.append(
-                    (i[0], 1 / int(i[1].rstrip('*>').lstrip('<')), i[2]))
-            SpaceBeforeChord = 0
-            WholePartLength = 0
-            for i in range(len(ttlist)):
-                WholePartLength += ttlist[i][1] * ttlist[i][2]
-                if i == 0:
-                    print('Space Before Chord %s\n\tis 0 of bar' %
-                          str(ttlist[i][0]))
-                else:
-                    SpaceBeforeChord += ttlist[i - 1][1] * ttlist[i - 1][2]
-                    print('Space Before Chord %s\n\tis %s of bar' %
-                          (ttlist[i][0], SpaceBeforeChord))
-            print('\nthe whole length of \"[%s]\" is %s' % (
-                DictItemWhichKeyIsPartName, WholePartLength))
-        print('')  # debug
+    Scan.PerChordSymbolAndPosition(PartsContent)
 
 
 if __name__ == '__main__':
