@@ -116,32 +116,44 @@ def ChordListGetter(PartsContainsChord):
 
 
 def PerChordSymbolAndPosition(PCTX):
-
+    Y = []
     for ChordsInEveryPart in ChordListGetter(PartsContainsChord(PCTX)):
+        X = []
         for DictItemWhichKeyIsPartName in ChordsInEveryPart:
-            print(DictItemWhichKeyIsPartName, ':')
+            # print(DictItemWhichKeyIsPartName, ':')
             ListOfChordWithEveryPartContent = []
             for i in ChordsInEveryPart[DictItemWhichKeyIsPartName]:
                 ListOfChordWithEveryPartContent.append(
                     (i[0], 1 / int(i[1].rstrip('*>').lstrip('<')), i[2]))
+                # print((i[0], 1 / int(i[1].rstrip('*>').lstrip('<')), i[2]))
             SpaceBeforeChord = 0
             WholePartLength = 0
             for i in range(len(ListOfChordWithEveryPartContent)):
                 WholePartLength += ListOfChordWithEveryPartContent[i][1] * \
                     ListOfChordWithEveryPartContent[i][2]
                 if i == 0:
-                    print('Space Before Chord %s\n===> 0 of bar' %
-                          ListOfChordWithEveryPartContent[i][0])
-                    print("Which The Chord Detail is\n===> %s" %
-                          [m.groupdict() for m in re.finditer(PerChordPattern, ListOfChordWithEveryPartContent[i][0])][0])
+                    # print('Space Before Chord %s\n===> 0 of bar' %
+                    #      ListOfChordWithEveryPartContent[i][0])
+                    # print("Which The Chord Detail is\n===> %s" %
+                    #      [m.groupdict() for m in re.finditer(PerChordPattern, ListOfChordWithEveryPartContent[i][0])][0])
+                    X.append((0.0, [m.groupdict() for m in re.finditer(
+                        PerChordPattern, ListOfChordWithEveryPartContent[i][0])][0]))
                 else:
                     SpaceBeforeChord += ListOfChordWithEveryPartContent[i -
                                                                         1][1] * ListOfChordWithEveryPartContent[i - 1][2]
-                    print('Space Before Chord %s\n===> %s of bar' %
-                          (ListOfChordWithEveryPartContent[i][0], SpaceBeforeChord))
-                    print("Which The Chord Detail is\n===> %s" %
-                          [m.groupdict() for m in re.finditer(PerChordPattern, ListOfChordWithEveryPartContent[i][0])][0])
-            print('\nthe whole length of \"[%s]\" is %s' % (
-                DictItemWhichKeyIsPartName, WholePartLength))
-        print('')
-        pass
+                    # print('Space Before Chord %s\n===> %s of bar' %
+                    #      (ListOfChordWithEveryPartContent[i][0], SpaceBeforeChord))
+                    # print("Which The Chord Detail is\n===> %s" %
+                    #      [m.groupdict() for m in re.finditer(PerChordPattern, ListOfChordWithEveryPartContent[i][0])][0])
+                    X.append((SpaceBeforeChord, [m.groupdict() for m in re.finditer(
+                        PerChordPattern, ListOfChordWithEveryPartContent[i][0])][0]))
+            # print('\nthe whole length of \"[[%s]]\" is %s' % (
+            #    DictItemWhichKeyIsPartName, WholePartLength))
+            Y.append(({DictItemWhichKeyIsPartName: X}, WholePartLength))
+    # print(Y)
+    # for i in Y:
+        # for k in i:
+        #    print('%s:\n%s' % (k, i[k]))
+        # print(i)
+    # print('')
+    return Y

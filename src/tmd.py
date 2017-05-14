@@ -48,7 +48,7 @@ def main():
     PartNameList = Scan.PartSequenceGetter(InputFile)
     PartSet = Scan.PartSetGetter(PartsContent)
     InstrumentSet = Scan.InstrumentSetGetter(PartsContent)
-    Scan.PerChordSymbolAndPosition(PartsContent)
+    print(Scan.PerChordSymbolAndPosition(PartsContent))
 
 
 if __name__ == '__main__':
