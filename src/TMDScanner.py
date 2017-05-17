@@ -109,8 +109,6 @@ def ChordListGetter(PartsContainsChord):
 
 
 def PerChordSymbolAndPosition(PCTX, SIGTRE):
-    print((frac('1/' + str(SIGTRE[0])),
-           SIGTRE[1],  frac(str(SIGTRE[1]) + '/' + str(SIGTRE[0]))))
     Y = []
     for ChordsInEveryPart in ChordListGetter(PartsContainsChord(PCTX)):
         X = []
@@ -119,7 +117,6 @@ def PerChordSymbolAndPosition(PCTX, SIGTRE):
             for i in ChordsInEveryPart[DictItemWhichKeyIsPartName]:
                 ListOfChordWithEveryPartContent.append(
                     (i[0], 1 / int(i[1].rstrip('*>').lstrip('<')), i[2]))
-                print(i[0], frac('1/' + i[1].rstrip('*>').lstrip('<')), i[2])
             SpaceBeforeChord = 0
             WholePartLength = 0
             for i in range(len(ListOfChordWithEveryPartContent)):

@@ -32,7 +32,6 @@ def FileChecker(ARGV):
         return True
 
 
-
 def main():
     ARGV = sys.argv
 
@@ -49,7 +48,7 @@ def main():
     PartNameList = Scan.PartSequenceGetter(InputFile)
     PartSet = Scan.PartSetGetter(PartsContent)
     InstrumentSet = Scan.InstrumentSetGetter(PartsContent)
-    print(Scan.PerChordSymbolAndPosition(PartsContent, Signature))
+    Scan.PerChordSymbolAndPosition(PartsContent, Signature)
 
 
 if __name__ == '__main__':
