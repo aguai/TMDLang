@@ -48,7 +48,16 @@ def main():
     PartNameList = Scan.PartSequenceGetter(InputFile)
     PartSet = Scan.PartSetGetter(PartsContent)
     InstrumentSet = Scan.InstrumentSetGetter(PartsContent)
-    Scan.PerChordSymbolAndPosition(PartsContent, Signature)
+    PreDrawChordMsg = Scan.PerChordSymbolAndPosition(PartsContent, Signature)
+    # print(PreDrawChordMsg)
+    for i in PreDrawChordMsg:
+        #print(str(i[0]) + '\n')
+        print('This Part Length: ', i[1])
+        for j in i[0]:
+            print(j, ':')
+            for k in i[0][j]:
+                print(k)
+    print('\nthe sequence: ', PartNameList)
 
 
 if __name__ == '__main__':
