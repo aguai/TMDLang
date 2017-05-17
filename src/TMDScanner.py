@@ -60,11 +60,8 @@ def PartsContainsChord(PRTCNT):
 
 def PartSetGetter(PartContentDict):
     SetOfPartname = set()
-    # print('PartSetGetter:')
     for i in PartContentDict:
-        # print(i['partname'])
         SetOfPartname.add(i['partname'])
-    # print(SetOfPartname)
     return SetOfPartname
 
 
@@ -72,7 +69,6 @@ def InstrumentSetGetter(PartContentList):
     SetOfInstument = set()
     for i in PartContentList:
         SetOfInstument.add(i['InstrumentName'])
-    # print(SetOfInstument)
     return SetOfInstument
 
 
@@ -88,7 +84,6 @@ def PartSequenceGetter(inputFile):
 def SignatureGetter(inputFile):
     Sig = re.findall(SignaturePattern, inputFile)
     if len(Sig) == 0:
-        # print('signature set to default 4/4')
         return (4, 4)
 
     elif Sig[0][1] not in {'1', '2', '4', '8', '16', '32'}:
@@ -100,19 +95,16 @@ def SignatureGetter(inputFile):
 
 
 def ChordListGetter(PartsContainsChord):
-    # print(PartsContainsChord)#debug
     XX = []
     re4Content = re.compile(
         r"(?P<TimeBase>\<[1|2|4|8|16|32]\*\>)(?P<ChordString>[^<$]+)")
     re4ChordLengh = re.compile(r"(?P<FullChord>\[[^\]]+\])(?P<dash>\-*)")
     for i in PartsContainsChord:
-        # print('\n=== === ===  ', i['partname'] + '\t=== === ===\n')
         TT = {i['partname']: []}
         for j in re4Content.findall(i['PartContent']):
             for k in re4ChordLengh.findall(j[1]):
                 TT[i['partname']].append((k[0], j[0], len(k[1]) + 1))
         XX.append(TT)
-
     return XX
 
 
@@ -123,7 +115,6 @@ def PerChordSymbolAndPosition(PCTX, SIGTRE):
     for ChordsInEveryPart in ChordListGetter(PartsContainsChord(PCTX)):
         X = []
         for DictItemWhichKeyIsPartName in ChordsInEveryPart:
-            # print(DictItemWhichKeyIsPartName, ':')
             ListOfChordWithEveryPartContent = []
             for i in ChordsInEveryPart[DictItemWhichKeyIsPartName]:
                 ListOfChordWithEveryPartContent.append(
