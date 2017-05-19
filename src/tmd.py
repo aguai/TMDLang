@@ -56,7 +56,7 @@ def main():
         for j in i[0]:
             print(j, ':')
             for k in i[0][j]:
-                print(k)
+                print(k[1], k[0] // 6, '==>', k[0] - (k[0] // 6) * 6)
     print('\nthe sequence: ', PartNameList)
 
 
