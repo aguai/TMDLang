@@ -51,7 +51,6 @@ def main():
     PreDrawChordMsg = Scan.PerChordSymbolAndPosition(PartsContent, Signature)
     # print(PreDrawChordMsg)
     for i in PreDrawChordMsg:
-        #print(str(i[0]) + '\n')
         print('This Part Length: ', i[1])
         for j in i[0]:
             print(j, ':')
