@@ -2,7 +2,6 @@ import cairo
 
 '''
 ps = cairo.PDFSurface("testpdf.pdf", 100, 100)
-ps = cairo.PDFSurface("testpdf.pdf", 100, 100)
 ct = cairo.Context(ps)
 
 ct.set_source_rgb(0, 0, 0)
@@ -22,7 +21,9 @@ ctx = cairo.Context(cairo.PDFSurface("testpdf.pdf", 2480.0, 3508.0))
 ctx.set_font_size(30)
 ctx.select_font_face("FreeSerif", cairo.FONT_SLANT_NORMAL,
                      cairo.FONT_WEIGHT_NORMAL)
-ctx.move_to(100, 100)
+ctx.move_to(300, 300)
+ctx.line_to(300, 3208)
+'''
 ctx.show_text(chr(119056) + chr(119057) + '1ABCDEFGm')
 ctx.show_page()  # 每次 show_page 會製作一個新頁面
 ctx.move_to(100, 100)
