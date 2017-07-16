@@ -17,12 +17,38 @@ ct.show_text(chr(119059) + chr(119058) + '3')
 ct.show_page()
 '''
 
-ctx = cairo.Context(cairo.PDFSurface("testpdf.pdf", 2480.0, 3508.0))
-ctx.set_font_size(30)
-ctx.select_font_face("FreeSerif", cairo.FONT_SLANT_NORMAL,
-                     cairo.FONT_WEIGHT_NORMAL)
+
+def barCord(n):
+    return ((100 + n % 6 * 380, 430 + n // 6 * 331),
+            (100 + n % 6 * 380, 430 + n // 6 * 331 + 300),
+            (100 + n % 6 * 380 + 380, 430 + n // 6 * 331),
+            (100 + n % 6 * 380 + 380, 430 + (n // 6) * 331 + 300))
+
+
+# ctx = cairo.Context(cairo.PDFSurface("haha.pdf", 2480.0, 3508.0))
+# ctx.set_font_size(30)
+# ctx.select_font_face("FreeSerif", cairo.FONT_SLANT_NORMAL,
+#                     cairo.FONT_WEIGHT_NORMAL)
+ps = cairo.PDFSurface("testpdf.pdf", 2480, 3508)
+ctx = cairo.Context(ps)
+ctx.set_source_rgb(0, 0, 0)
+ctx.set_line_width(1)
+
+#ctx.move_to(100, 100)
+#ctx.line_to(2000, 3000)
+
+for i in range(0, 54):
+    ctx.move_to(barCord(i)[0][0], barCord(i)[0][1])
+    ctx.line_to(barCord(i)[1][0], barCord(i)[1][1])
+    ctx.move_to(barCord(i)[2][0], barCord(i)[2][1])
+    ctx.line_to(barCord(i)[3][0], barCord(i)[3][1])
+ctx.stroke()
+
+ctx.show_page()
+'''
 ctx.move_to(300, 300)
 ctx.line_to(300, 3208)
+'''
 '''
 ctx.show_text(chr(119056) + chr(119057) + '1ABCDEFGm')
 ctx.show_page()  # 每次 show_page 會製作一個新頁面
@@ -39,3 +65,4 @@ for y in range(20):
 
 ctx.show_glyphs(glyphs)
 ctx.show_page()
+'''
