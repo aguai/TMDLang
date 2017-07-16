@@ -1,9 +1,6 @@
 import cairo
 
 
-import cairo
-
-
 def main():
 
     ps = cairo.PDFSurface("pdffile.pdf", 504, 648)
