@@ -1,4 +1,4 @@
-import cairo
+import cairocffi as cairo
 
 '''
 ps = cairo.PDFSurface("testpdf.pdf", 100, 100)
