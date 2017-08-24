@@ -1,6 +1,6 @@
 package main
 
-import "github.com/ungerik/go-cairo"
+import cairo "github.com/ungerik/go-cairo"
 
 func main() {
 	surface := cairo.NewPDFSurface("testpdf.pdf", 120, 220, cairo.PDF_VERSION_1_5)
@@ -10,11 +10,11 @@ func main() {
 	surface.MoveTo(10.0, 50.0)
 	surface.ShowText("𝄐1m")
 	surface.ShowPage()
-	surface.SetLineWidth(2.5)
-	surface.LineTo(66, 66)
-	surface.Stroke()
+	//surface.SetLineWidth(2.5)
+	//surface.LineTo(66, 66)
+	//surface.Stroke()
 	surface.MoveTo(10.0, 50.0)
-	surface.ShowText("𝄐2sus4")
+	surface.ShowText("𝄆 𝄐2sus4 𝄇")
 	surface.ShowPage()
 	surface.Finish()
 }

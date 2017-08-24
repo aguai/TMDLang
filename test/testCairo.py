@@ -1,4 +1,4 @@
-import cairocffi as cairo
+import cairo
 
 '''
 ps = cairo.PDFSurface("testpdf.pdf", 100, 100)
@@ -18,11 +18,18 @@ ct.show_page()
 '''
 
 
-def barCord(n):
-    return ((100 + n % 6 * 380, 430 + n // 6 * 331),
-            (100 + n % 6 * 380, 430 + n // 6 * 331 + 300),
-            (100 + n % 6 * 380 + 380, 430 + n // 6 * 331),
-            (100 + n % 6 * 380 + 380, 430 + (n // 6) * 331 + 300))
+def barCoord(n):
+    '''
+    returns ((x-left-top, y-left-top),
+            (x-left-buttom, y-right-buttom),
+            (x-right-top, y-right-top),
+            (x-right-buttom, y-right-buttom))
+            coordinate of a bar area   
+    '''
+    return ((100 + (n % 6) * 380, 430 + (n // 6) * 331),                # left x-axis 100pt for margin blank    
+            (100 + (n % 6) * 380, 430 + (n // 6) * 331 + 252),          # top  y-axis 430pt for title
+            (100 + (n % 6) * 380 + 380, 430 + (n // 6) * 331),          # 252 is 1.5em for chord 1em * 3 for melody 56pt per em
+            (100 + (n % 6) * 380 + 380, 430 + (n // 6) * 331 + 252))
 
 
 # ctx = cairo.Context(cairo.PDFSurface("haha.pdf", 2480.0, 3508.0))
@@ -37,11 +44,11 @@ ctx.set_line_width(1)
 #ctx.move_to(100, 100)
 #ctx.line_to(2000, 3000)
 
-for i in range(0, 54):
-    ctx.move_to(barCord(i)[0][0], barCord(i)[0][1])
-    ctx.line_to(barCord(i)[1][0], barCord(i)[1][1])
-    ctx.move_to(barCord(i)[2][0], barCord(i)[2][1])
-    ctx.line_to(barCord(i)[3][0], barCord(i)[3][1])
+for i in range(54):
+    ctx.move_to(barCoord(i)[0][0], barCoord(i)[0][1])
+    ctx.line_to(barCoord(i)[1][0], barCoord(i)[1][1])
+    ctx.move_to(barCoord(i)[2][0], barCoord(i)[2][1])
+    ctx.line_to(barCoord(i)[3][0], barCoord(i)[3][1])
 ctx.stroke()
 
 ctx.show_page()
