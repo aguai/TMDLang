@@ -17,4 +17,5 @@ func main() {
 	surface.ShowText("𝄆 𝄐2sus4 𝄇")
 	surface.ShowPage()
 	surface.Finish()
+	surface := cairo.
 }
