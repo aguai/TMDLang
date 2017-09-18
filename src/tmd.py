@@ -57,7 +57,7 @@ def main():
             for k in i[0][j]:
                 # print(k[1],  k[0], 'bar behind\n-> \trow:', int(k[0] // 6), '\tcol:', k[0] % 6,
                 #       '\n==>', k[0] - (k[0] // 6) * 6)
-                print(k[1], '\n', k[0],  'bar behind->', 'at bar ', str(int(k[0])),
+                print(k[0], '\n', k[1],  'bar behind->', 'at bar ', str(int(k[0])),
                       '\trow:', int(k[0] // 6), '\tcol:', int(k[0]) % 6)
     print('\nthe sequence: ', PartNameList)
 

@@ -1,0 +1,122 @@
+This Part Length:  12.0
+intro :
+0.0 
+ {'Root': '1', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  0 	row: 0 	col: 0
+3/2 
+ {'Root': '7', 'RootAccidental': ',', 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  1 	row: 0 	col: 1
+2 
+ {'Root': '1', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  2 	row: 0 	col: 2
+7/2 
+ {'Root': '7', 'RootAccidental': ',', 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  3 	row: 0 	col: 3
+4 
+ {'Root': '1', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  4 	row: 0 	col: 4
+11/2 
+ {'Root': '7', 'RootAccidental': ',', 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  5 	row: 0 	col: 5
+6 
+ {'Root': '1', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  6 	row: 1 	col: 0
+15/2 
+ {'Root': '7', 'RootAccidental': ',', 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  7 	row: 1 	col: 1
+8 
+ {'Root': '1', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  8 	row: 1 	col: 2
+19/2 
+ {'Root': '7', 'RootAccidental': ',', 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  9 	row: 1 	col: 3
+10 
+ {'Root': '1', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  10 	row: 1 	col: 4
+23/2 
+ {'Root': '7', 'RootAccidental': ',', 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  11 	row: 1 	col: 5
+This Part Length:  12.0
+A :
+0.0 
+ {'Root': '1', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  0 	row: 0 	col: 0
+2 
+ {'Root': '5', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  2 	row: 0 	col: 2
+4 
+ {'Root': '6', 'RootAccidental': None, 'Tonic': 'm', 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  4 	row: 0 	col: 4
+5 
+ {'Root': '5', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  5 	row: 0 	col: 5
+6 
+ {'Root': '4', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  6 	row: 1 	col: 0
+7 
+ {'Root': '5', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  7 	row: 1 	col: 1
+8 
+ {'Root': '1', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  8 	row: 1 	col: 2
+10 
+ {'Root': '5', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  10 	row: 1 	col: 4
+This Part Length:  10.0
+B :
+0.0 
+ {'Root': '4', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  0 	row: 0 	col: 0
+2 
+ {'Root': '5', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  2 	row: 0 	col: 2
+4 
+ {'Root': '4', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  4 	row: 0 	col: 4
+6 
+ {'Root': '5', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  6 	row: 1 	col: 0
+8 
+ {'Root': '3', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  8 	row: 1 	col: 2
+This Part Length:  18.0
+C :
+0.0 
+ {'Root': '1', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  0 	row: 0 	col: 0
+1 
+ {'Root': '7', 'RootAccidental': ',', 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  1 	row: 0 	col: 1
+2 
+ {'Root': '4', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  2 	row: 0 	col: 2
+3 
+ {'Root': '5', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  3 	row: 0 	col: 3
+4 
+ {'Root': '1', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  4 	row: 0 	col: 4
+5 
+ {'Root': '7', 'RootAccidental': ',', 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  5 	row: 0 	col: 5
+6 
+ {'Root': '4', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  6 	row: 1 	col: 0
+7 
+ {'Root': '5', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  7 	row: 1 	col: 1
+8 
+ {'Root': '1', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  8 	row: 1 	col: 2
+9 
+ {'Root': '7', 'RootAccidental': ',', 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  9 	row: 1 	col: 3
+10 
+ {'Root': '4', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  10 	row: 1 	col: 4
+11 
+ {'Root': '5', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  11 	row: 1 	col: 5
+12 
+ {'Root': '6', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  12 	row: 2 	col: 0
+13 
+ {'Root': '5', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  13 	row: 2 	col: 1
+14 
+ {'Root': '4', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  14 	row: 2 	col: 2
+15 
+ {'Root': '5', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  15 	row: 2 	col: 3
+16 
+ {'Root': '6', 'RootAccidental': ',', 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  16 	row: 2 	col: 4
+17 
+ {'Root': '7', 'RootAccidental': ',', 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  17 	row: 2 	col: 5
+This Part Length:  12.0
+bridge :
+0.0 
+ {'Root': '1', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  0 	row: 0 	col: 0
+3/2 
+ {'Root': '7', 'RootAccidental': ',', 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  1 	row: 0 	col: 1
+2 
+ {'Root': '1', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  2 	row: 0 	col: 2
+7/2 
+ {'Root': '7', 'RootAccidental': ',', 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  3 	row: 0 	col: 3
+4 
+ {'Root': '1', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  4 	row: 0 	col: 4
+11/2 
+ {'Root': '7', 'RootAccidental': ',', 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  5 	row: 0 	col: 5
+6 
+ {'Root': '1', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  6 	row: 1 	col: 0
+15/2 
+ {'Root': '7', 'RootAccidental': ',', 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  7 	row: 1 	col: 1
+8 
+ {'Root': '1', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  8 	row: 1 	col: 2
+19/2 
+ {'Root': '7', 'RootAccidental': ',', 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  9 	row: 1 	col: 3
+10 
+ {'Root': '1', 'RootAccidental': None, 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  10 	row: 1 	col: 4
+23/2 
+ {'Root': '7', 'RootAccidental': ',', 'Tonic': None, 'TensionNote': '', 'Bass': None, 'BassAccidental': None} bar behind-> at bar  11 	row: 1 	col: 5
+
+the sequence:  ['intro', 'A', 'B', '{?-3}', 'C', '{?+3}', 'bridge', 'A', 'B', '{?-3}', 'C', '{?+3}', 'ending']
