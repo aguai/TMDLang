@@ -15,8 +15,7 @@ currentSurface.set_line_width(1)
 def DrawBasicLayout(CSF):
     for i in range(7):
         CSF.move_to(
-            (A4[0] / 14) * ((2 * i) + 1),
-            A4[1] / 18)
+            (A4[0] / 14) * ((2 * i) + 1), A4[1] / 18)
         for j in range(11):
             CSF.rel_move_to(0, A4[1] / 36)
             CSF.rel_line_to(0, A4[1] / 18)
