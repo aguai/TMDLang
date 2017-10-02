@@ -1,3 +1,4 @@
+#!/usr/local/bin/python3
 import cairo
 
 A4 = [2480.0, 3508.0]
