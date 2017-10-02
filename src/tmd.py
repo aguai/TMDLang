@@ -1,3 +1,4 @@
+#!/usr/local/bin/python3
 from pathlib import Path
 import TMDScanner as Scan
 import re
