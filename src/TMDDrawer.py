@@ -1,5 +1,5 @@
 #!/usr/local/bin/python3
-import cairo
+import cairocffi as cairo
 
 A4 = [2480.0, 3508.0]
 B4 = [2150.0, 3248.0]
