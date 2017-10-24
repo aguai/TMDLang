@@ -58,8 +58,8 @@ namespace tmdlang
 		int counter = 0;
 		for (auto& unit : value.units)
 		{
-			if (counter % 16 == 0) o << endl << '\t';
-			o << unit;
+			if (counter % 8 == 0) o << endl << '\t';
+			o << unit << ' ';
 			counter++;
 		}
 		return o << endl << endl;
@@ -115,7 +115,7 @@ namespace tmdlang
 		int counter = 0;
 		for (auto& order : value.orders)
 		{
-			o << order;
+			o << "->" << order;
 			if (++counter % 4 == 0) o << endl;
 		}
 
@@ -128,17 +128,21 @@ namespace tmdlang
 	
 	string ltrim(string input, const char* ignores) {
 		string s = input;
-		s.erase(s.begin(), find_if(s.begin(), s.end(), [=](int ch) {
-			return strchr(ignores, ch) != nullptr;
-		}));
+		auto it = find_if(s.begin(), s.end(), [=](int ch) {
+			return strchr(ignores, ch) == nullptr;
+		});
+		if (it == s.end()) return s;
+		s.erase(s.begin(), it);
 		return s;
 	}
 
 	string rtrim(string input, const char* ignores) {
 		string s = input;
-		s.erase(find_if(s.rbegin(), s.rend(), [=](int ch) {
-			return strchr(ignores, ch) != nullptr;
-		}).base(), s.end());
+		auto it = find_if(s.rbegin(), s.rend(), [=](int ch) {
+			return strchr(ignores, ch) == nullptr;
+		});
+		if (it == s.rend()) return s;
+		s.erase(it.base(), s.end());
 		return s;
 	}
 
@@ -156,8 +160,8 @@ namespace tmdlang
 
 		bool GetChar()
 		{
-			if (i.eof()) return false;
 			c = (char)i.get();
+			if (i.eof()) return false;
 			if (c == '\n')
 			{
 				row++;
@@ -189,19 +193,27 @@ namespace tmdlang
 			}
 		}
 
-		string Read(bool skip = false, const char until = 0, const char* ignores = "\r\n\t ")
+		void EnsureGet(const char* ignores = "\r\n\t ")
 		{
-			if (!Get(ignores)) UnexpectedFileEnding();
+			if (!Get()) UnexpectedFileEnding();
+		}
+
+		string ReadNullable(bool skip = false, const char until = 0, const char* ignores = "\r\n\t ")
+		{
 			string result;
 			stringstream ss;
-			if(!skip) ss << c;
+			if (!skip)
+			{
+				if (until && c == until) return "";
+				ss << c;
+			}
 			while (GetChar())
 			{
 				if (until)
 				{
 					if (c == until)
 					{
-						return rtrim(ss.str(), ignores);
+						return ltrim(rtrim(ss.str(), ignores), ignores);
 					}
 				}
 				else
@@ -216,6 +228,16 @@ namespace tmdlang
 			UnexpectedFileEnding();
 		}
 
+		string Read(bool skip = false, const char until = 0, const char* ignores = "\r\n\t ")
+		{
+			string s = ReadNullable(skip, until, ignores);
+			if (s == "")
+			{
+				Error("Unexpected empty string.");
+			}
+			return s;
+		}
+
 		void Ensure(const char* text, const char* ignores = "\r\n\t ")
 		{
 			auto reading = text;
@@ -223,7 +245,7 @@ namespace tmdlang
 			{
 				while (true)
 				{
-					if (!Get()) UnexpectedFileEnding();
+					EnsureGet();
 					if (!strchr(ignores, c)) break;
 				}
 				if (reading[-1] != c) Error("Expect \"" + string(text) + "\" here.");
@@ -234,7 +256,8 @@ namespace tmdlang
 		{
 			stringstream ss;
 			ss << "row: " << row << ", column: " << column << " message: " << message;
-			throw ss.str();
+			string s = ss.str();
+			throw s;
 		}
 
 		void UnexpectedFileEnding()
@@ -276,17 +299,15 @@ namespace tmdlang
 				break;
 			case '<':
 				{
-					stringstream(cr.Read(true)) >> beat.count;
-					cr.Ensure("/");
-					stringstream(cr.Read(true)) >> beat.node;
-					cr.Ensure(">");
+					stringstream(cr.Read(true, '/')) >> beat.count;
+					stringstream(cr.Read(true, '>')) >> beat.node;
 				}
 				break;
 			case '-':
 				while(true)
 				{
 					cr.Ensure(">");
-					if (!cr.Get()) cr.UnexpectedFileEnding();
+					cr.EnsureGet();
 					switch (cr.c)
 					{
 					case '#':
@@ -294,7 +315,7 @@ namespace tmdlang
 					case '{':
 						{
 							cr.Ensure("?");
-							if (!cr.Get()) cr.UnexpectedFileEnding();
+							cr.EnsureGet();
 							switch (cr.c)
 							{
 							case '=':
@@ -318,13 +339,21 @@ namespace tmdlang
 				{
 					auto paragraph = make_shared<Paragraph>();
 					paragraphs.push_back(paragraph);
-					paragraph->name = cr.Read(false, ':');
+					paragraph->name = cr.ReadNullable(false, ':');
 					paragraph->instrument = cr.Read(true, '@');
-					cr.Ensure("|");
-					stringstream(cr.Read(false, '|')) >> paragraph->start;
-					cr.Ensure("{");
 
-					if (!cr.Get()) cr.UnexpectedFileEnding();
+					cr.EnsureGet();
+					if (cr.c == '|')
+					{
+						stringstream(cr.Read(true, '|')) >> paragraph->start;
+						cr.Ensure("{");
+					}
+					else if (cr.c != '{')
+					{
+						cr.UnexpectedChar();
+					}
+
+					cr.EnsureGet();
 					while (true)
 					{
 						switch (cr.c)
@@ -337,7 +366,7 @@ namespace tmdlang
 								stringstream(cr.Read(true, '*')) >> section->nodeLength;
 								cr.Ensure(">");
 
-								if (!cr.Get("\r\n\t |")) cr.UnexpectedFileEnding();
+								cr.EnsureGet("\r\n\t |");
 								while (true)
 								{
 									if (cr.c == '<' || cr.c == '}')break;
@@ -345,11 +374,11 @@ namespace tmdlang
 									{
 									case '-':
 										section->units.push_back({ UnitType::Copy });
-										if (!cr.Get("\r\n\t |")) cr.UnexpectedFileEnding();
+										cr.EnsureGet("\r\n\t |");
 										break;
 									case '[':
 										section->units.push_back({ UnitType::Chord,{},cr.Read(true,']') });
-										if (!cr.Get("\r\n\t |")) cr.UnexpectedFileEnding();
+										cr.EnsureGet("\r\n\t |");
 										break;
 									default:
 										{
@@ -362,7 +391,7 @@ namespace tmdlang
 
 											while (true)
 											{
-												if (!cr.Get("\r\n\t |")) cr.UnexpectedFileEnding();
+												cr.EnsureGet("\r\n\t |");
 												if (cr.c == '\'')
 												{
 													node.sharpFalls = SharpFalls::Sharp;
