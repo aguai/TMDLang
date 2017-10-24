@@ -1,6 +1,7 @@
 #include "TMDLang.h"
 #include <sstream>
 #include <algorithm>
+#include <cstring>
 
 using namespace std;
 
@@ -26,6 +27,7 @@ namespace tmdlang
 		case SharpFalls::Falls:
 			o << ',';
 			break;
+		default:;
 		}
 
 		if (value.octave > 0)
