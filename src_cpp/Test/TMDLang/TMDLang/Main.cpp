@@ -8,6 +8,7 @@ using namespace tmdlang;
 
 void Format(string filename)
 {
+	cout << "Reading " << filename << ".tmd ..." << endl;
 	auto sheet = make_shared<Sheet>();
 	{
 		ifstream i(filename + ".tmd");

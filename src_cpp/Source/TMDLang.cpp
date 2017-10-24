@@ -189,12 +189,12 @@ namespace tmdlang
 			}
 		}
 
-		string Read(const char until = 0, const char* ignores = "\r\n\t ")
+		string Read(bool skip = false, const char until = 0, const char* ignores = "\r\n\t ")
 		{
 			if (!Get(ignores)) UnexpectedFileEnding();
 			string result;
 			stringstream ss;
-			ss << c;
+			if(!skip) ss << c;
 			while (GetChar())
 			{
 				if (until)
@@ -216,12 +216,16 @@ namespace tmdlang
 			UnexpectedFileEnding();
 		}
 
-		void Ensure(const char* text)
+		void Ensure(const char* text, const char* ignores = "\r\n\t ")
 		{
 			auto reading = text;
 			while (*reading++)
 			{
-				if (!Get()) UnexpectedFileEnding();
+				while (true)
+				{
+					if (!Get()) UnexpectedFileEnding();
+					if (!strchr(ignores, c)) break;
+				}
 				if (reading[-1] != c) Error("Expect \"" + string(text) + "\" here.");
 			}
 		}
@@ -237,6 +241,11 @@ namespace tmdlang
 		{
 			Error("Unexpected file ending.");
 		}
+
+		void UnexpectedChar(char ch = 0)
+		{
+			Error("Unexpected char: " + string(1, (ch ? ch : c)) + ".");
+		}
 	};
 
 	void Sheet::Read(std::istream& i)
@@ -250,26 +259,26 @@ namespace tmdlang
 			{
 			case '*':
 				cr.Ensure("*");
-				name = cr.Read('*');
+				name = cr.Read(true, '*');
 				cr.Ensure("*");
 				break;
 			case '!':
 				{
 					cr.Ensure("=");
-					stringstream(cr.Read()) >> speed;
+					stringstream(cr.Read(true)) >> speed;
 				}
 				break;
 			case '?':
 				{
 					cr.Ensure("=");
-					keySignature = cr.Read();
+					keySignature = cr.Read(true);
 				}
 				break;
 			case '<':
 				{
-					stringstream(cr.Read()) >> beat.count;
+					stringstream(cr.Read(true)) >> beat.count;
 					cr.Ensure("/");
-					stringstream(cr.Read()) >> beat.node;
+					stringstream(cr.Read(true)) >> beat.node;
 					cr.Ensure(">");
 				}
 				break;
@@ -289,31 +298,111 @@ namespace tmdlang
 							switch (cr.c)
 							{
 							case '=':
-								orders.push_back({ OrderType::Absolute,cr.Read('}') });
+								orders.push_back({ OrderType::Absolute,cr.Read(true, '}') });
 								break;
 							default:
-								{
-									string name(1, cr.c);
-									name += cr.Read('}');
-									orders.push_back({ OrderType::Relative,name });
-								}
+								orders.push_back({ OrderType::Relative,cr.Read(false,'}') });
 								break;
 							}
 							cr.Ensure("-");
 						}
 						break;
 					default:
-						{
-							string name(1, cr.c);
-							name += cr.Read('-');
-							orders.push_back({ OrderType::Name,name });
-						}
+						orders.push_back({ OrderType::Name,cr.Read(false,'-') });
 						break;
 					}
 				}
 				STOP_ORDER:
 				break;
 			default:
+				{
+					auto paragraph = make_shared<Paragraph>();
+					paragraphs.push_back(paragraph);
+					paragraph->name = cr.Read(false, ':');
+					paragraph->instrument = cr.Read(true, '@');
+					cr.Ensure("|");
+					stringstream(cr.Read(false, '|')) >> paragraph->start;
+					cr.Ensure("{");
+
+					if (!cr.Get()) cr.UnexpectedFileEnding();
+					while (true)
+					{
+						switch (cr.c)
+						{
+						case '<':
+							{
+								auto section = make_shared<Section>();
+								paragraph->sections.push_back(section);
+
+								stringstream(cr.Read(true, '*')) >> section->nodeLength;
+								cr.Ensure(">");
+
+								if (!cr.Get("\r\n\t |")) cr.UnexpectedFileEnding();
+								while (true)
+								{
+									if (cr.c == '<' || cr.c == '}')break;
+									switch (cr.c)
+									{
+									case '-':
+										section->units.push_back({ UnitType::Copy });
+										if (!cr.Get("\r\n\t |")) cr.UnexpectedFileEnding();
+										break;
+									case '[':
+										section->units.push_back({ UnitType::Chord,{},cr.Read(true,']') });
+										if (!cr.Get("\r\n\t |")) cr.UnexpectedFileEnding();
+										break;
+									default:
+										{
+											Node node;
+											if (!('1' <= cr.c && cr.c <= '7'))
+											{
+												cr.UnexpectedChar();
+											}
+											node.name = cr.c - '1';
+
+											while (true)
+											{
+												if (!cr.Get("\r\n\t |")) cr.UnexpectedFileEnding();
+												if (cr.c == '\'')
+												{
+													node.sharpFalls = SharpFalls::Sharp;
+												}
+												else if (cr.c == ',')
+												{
+													node.sharpFalls = SharpFalls::Falls;
+												}
+												else if (cr.c == ',')
+												{
+													node.sharpFalls = SharpFalls::Falls;
+												}
+												else if (cr.c == '^')
+												{
+													node.octave++;
+												}
+												else if (cr.c == '_')
+												{
+													node.octave--;
+												}
+												else
+												{
+													section->units.push_back({ UnitType::Node,node });
+													break;
+												}
+											}
+										}
+										break;
+									}
+								}
+							}
+							break;
+						case '}':
+							goto STOP_PARAGRAPH;
+						default:
+							cr.UnexpectedChar();
+						}
+					}
+				}
+				STOP_PARAGRAPH:
 				break;
 			}
 		}
