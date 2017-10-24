@@ -195,19 +195,20 @@ namespace tmdlang
 
 		void EnsureGet(const char* ignores = "\r\n\t ")
 		{
-			if (!Get()) UnexpectedFileEnding();
+			if (!Get(ignores)) UnexpectedFileEnding();
 		}
 
 		string ReadNullable(bool skip = false, const char until = 0, const char* ignores = "\r\n\t ")
 		{
 			string result;
 			stringstream ss;
-			if (!skip)
+
+			if (skip)
 			{
-				if (until && c == until) return "";
-				ss << c;
+				Get(ignores);
 			}
-			while (GetChar())
+
+			while (true)
 			{
 				if (until)
 				{
@@ -224,6 +225,7 @@ namespace tmdlang
 					}
 				}
 				ss << c;
+				GetChar();
 			}
 			UnexpectedFileEnding();
 		}
@@ -257,6 +259,9 @@ namespace tmdlang
 			stringstream ss;
 			ss << "row: " << row << ", column: " << column << " message: " << message;
 			string s = ss.str();
+#ifdef _DEBUG
+			cout << s << endl;
+#endif
 			throw s;
 		}
 
