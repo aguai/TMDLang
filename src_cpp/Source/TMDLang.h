@@ -1,0 +1,92 @@
+#pragma once
+
+#include <memory>
+#include <string>
+#include <vector>
+
+namespace tmdlang
+{
+	// <count/node>
+	struct Beat
+	{
+		int						count = 4;
+		int						node = 4;
+	};
+
+	enum class SharpFalls
+	{
+		Normal,
+		Sharp,
+		Falls,
+	};
+
+	// 1 ->    {octave:0  name:1 Normal}
+	// 2'^^ -> {octave:2  name:2 Sharp }
+	// 3,_ ->  {octave:-1 name:3 Falls }
+	struct Node
+	{
+		SharpFalls				sharpFalls = SharpFalls::Normal;
+		int						name = 0;
+		int						octave = 0;
+	};
+
+	enum class UnitType
+	{
+		Node,		// 1
+		Chord,		// [1]
+		Copy,		// -
+	};
+
+	struct Unit
+	{
+		UnitType				type;
+		Node					node;			// only available when type == Node
+		std::string				chord;			// only available when type == Chord
+	};
+
+	struct Section
+	{
+		using List = std::vector<std::shared_ptr<Section>>;
+
+		int						nodeLength = 4;	// <nodeLength*>
+		std::vector<Unit>		units;
+	};
+
+	// name:instrument@|start|{ ... }
+	struct Paragraph
+	{
+		using List = std::vector<std::shared_ptr<Paragraph>>;
+
+		std::string				name;
+		std::string				instrument;
+		int						start = 0;
+		Section::List			sections;
+
+		virtual ~Paragraph() = default;
+	};
+
+	enum class OrderType
+	{
+		Name,		// intro
+		Relative,	// {?+5}
+		Absolute,	// {?=E,}
+	};
+
+	struct Order
+	{
+		OrderType				orderType;
+		std::string				name;
+	};
+
+	struct Sheet
+	{
+		std::string				name;			// ** name **
+		int						speed = 133;	// != speed
+		std::string				keySignature;	// ?= keySignature
+		Beat					beat;			// <4/4>
+		Paragraph::List			paragraphs;		//
+		std::vector<Order>		orders;			// -> intro -> A -> {?+3} -> B ->#
+
+		virtual ~Sheet() = default;
+	};
+}
