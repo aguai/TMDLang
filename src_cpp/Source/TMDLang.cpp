@@ -52,14 +52,37 @@ namespace tmdlang
 		}
 	}
 
+	std::ostream& operator<<(std::ostream& o, const UnitGroup& value)
+	{
+		if (value.units.size() == 1 && value.length == 1)
+		{
+			o << value.units[0];
+		}
+		else
+		{
+			o << "(";
+			for (auto& unit : value.units)
+			{
+				o << unit;
+			}
+			o << ")%(";
+			for (int i = 0; i < value.length; i++)
+			{
+				o << "-";
+			}
+			o << ")";
+		}
+		return o;
+	}
+
 	std::ostream& operator<<(std::ostream& o, const Section& value)
 	{
 		o << "\t<" << value.nodeLength << "*>";
 		int counter = 0;
-		for (auto& unit : value.units)
+		for (auto& unitGroup : value.unitGroups)
 		{
 			if (counter % 8 == 0) o << endl << '\t';
-			o << unit << ' ';
+			o << *unitGroup.get() << ' ';
 			counter++;
 		}
 		return o << endl << endl;
@@ -276,6 +299,64 @@ namespace tmdlang
 		}
 	};
 
+	Unit ReadUnitLookedAhead(CharReader& cr)
+	{
+		switch (cr.c)
+		{
+		case '-':
+			{
+				Unit unit = { UnitType::Copy };
+				cr.EnsureGet("\r\n\t |");
+				return unit;
+			}
+		case '[':
+			{
+				Unit unit = { UnitType::Chord,{},cr.Read(true,']') };
+				cr.EnsureGet("\r\n\t |");
+				return unit;
+			}
+		default:
+			{
+				Node node;
+				if (!('1' <= cr.c && cr.c <= '7'))
+				{
+					cr.UnexpectedChar();
+				}
+				node.name = cr.c - '1';
+
+				while (true)
+				{
+					cr.EnsureGet("\r\n\t |");
+					if (cr.c == '\'')
+					{
+						node.sharpFalls = SharpFalls::Sharp;
+					}
+					else if (cr.c == ',')
+					{
+						node.sharpFalls = SharpFalls::Falls;
+					}
+					else if (cr.c == ',')
+					{
+						node.sharpFalls = SharpFalls::Falls;
+					}
+					else if (cr.c == '^')
+					{
+						node.octave++;
+					}
+					else if (cr.c == '_')
+					{
+						node.octave--;
+					}
+					else
+					{
+						return{ UnitType::Node,node };
+					}
+				}
+			}
+			break;
+		}
+	}
+
 	void Sheet::Read(std::istream& i)
 	{
 		CharReader cr(i);
@@ -375,56 +456,31 @@ namespace tmdlang
 								while (true)
 								{
 									if (cr.c == '<' || cr.c == '}')break;
-									switch (cr.c)
-									{
-									case '-':
-										section->units.push_back({ UnitType::Copy });
-										cr.EnsureGet("\r\n\t |");
-										break;
-									case '[':
-										section->units.push_back({ UnitType::Chord,{},cr.Read(true,']') });
-										cr.EnsureGet("\r\n\t |");
-										break;
-									default:
-										{
-											Node node;
-											if (!('1' <= cr.c && cr.c <= '7'))
-											{
-												cr.UnexpectedChar();
-											}
-											node.name = cr.c - '1';
 
-											while (true)
-											{
-												cr.EnsureGet("\r\n\t |");
-												if (cr.c == '\'')
-												{
-													node.sharpFalls = SharpFalls::Sharp;
-												}
-												else if (cr.c == ',')
-												{
-													node.sharpFalls = SharpFalls::Falls;
-												}
-												else if (cr.c == ',')
-												{
-													node.sharpFalls = SharpFalls::Falls;
-												}
-												else if (cr.c == '^')
-												{
-													node.octave++;
-												}
-												else if (cr.c == '_')
-												{
-													node.octave--;
-												}
-												else
-												{
-													section->units.push_back({ UnitType::Node,node });
-													break;
-												}
-											}
+									auto unitGroup = make_shared<UnitGroup>();
+									section->unitGroups.push_back(unitGroup);
+									if (cr.c == '(')
+									{
+										cr.EnsureGet("\r\n\t |");
+										while (true)
+										{
+											if (cr.c == ')')break;
+											unitGroup->units.push_back(ReadUnitLookedAhead(cr));
 										}
-										break;
+										cr.Ensure("%(");
+										unitGroup->length = 0;
+										while (true)
+										{
+											cr.EnsureGet();
+											if (cr.c == ')') break;
+											else if (cr.c == '-') unitGroup->length++;
+											else cr.UnexpectedChar();
+										}
+										cr.EnsureGet("\r\n\t |");
+									}
+									else
+									{
+										unitGroup->units.push_back(ReadUnitLookedAhead(cr));
 									}
 								}
 							}

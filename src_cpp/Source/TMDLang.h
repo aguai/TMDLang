@@ -45,12 +45,24 @@ namespace tmdlang
 		std::string				chord;			// only available when type == Chord
 	};
 
+	struct UnitGroup
+	{
+		using List = std::vector<std::shared_ptr<UnitGroup>>;
+
+		std::vector<Unit>		units;
+		int						length = 1;
+
+		virtual ~UnitGroup() = default;
+	};
+
 	struct Section
 	{
-		using List = std::vector<std::shared_ptr<Section> >;
+		using List = std::vector<std::shared_ptr<Section>>;
 
 		int						nodeLength = 4;	// <nodeLength*>
-		std::vector<Unit>		units;
+		UnitGroup::List			unitGroups;
+
+		virtual ~Section() = default;
 	};
 
 	// name:instrument@|start|{ ... }
@@ -96,6 +108,7 @@ namespace tmdlang
 	extern std::ostream&		operator<<(std::ostream& o, const Beat& value);
 	extern std::ostream&		operator<<(std::ostream& o, const Node& value);
 	extern std::ostream&		operator<<(std::ostream& o, const Unit& value);
+	extern std::ostream&		operator<<(std::ostream& o, const UnitGroup& value);
 	extern std::ostream&		operator<<(std::ostream& o, const Section& value);
 	extern std::ostream&		operator<<(std::ostream& o, const Paragraph& value);
 	extern std::ostream&		operator<<(std::ostream& o, const Order& value);
