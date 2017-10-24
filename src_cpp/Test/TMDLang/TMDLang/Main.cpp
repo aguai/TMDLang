@@ -15,7 +15,7 @@ void Format(string filename)
 		sheet->Read(i);
 	}
 	{
-		ofstream o(filename + ".formatted.tmd");
+		ofstream o("Formatted/" + filename + ".formatted.tmd");
 		o << *sheet.get();
 	}
 }
