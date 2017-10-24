@@ -46,8 +46,8 @@ intro:Guitar@{
 
 intro:GROOVE@|+2|{
 <16*>
-D-tD-DtD D-tD-DtD D-tD-DtD D-tD-DtD
-/*TODO*/
+/* D-tD-DtD D-tD-DtD D-tD-DtD D-tD-DtD */
+/* TODO */
 }
 A:CHORD@{
 <2*>

@@ -81,9 +81,13 @@ namespace tmdlang
 		int counter = 0;
 		for (auto& unitGroup : value.unitGroups)
 		{
-			if (counter % 8 == 0) o << endl << '\t';
+			if (counter % 8 == 0 || counter >= 8)
+			{
+				o << endl << '\t';
+				counter = 0;
+			}
 			o << *unitGroup.get() << ' ';
-			counter++;
+			counter += unitGroup->length;
 		}
 		return o << endl << endl;
 	}
@@ -138,7 +142,7 @@ namespace tmdlang
 		int counter = 0;
 		for (auto& order : value.orders)
 		{
-			o << "->" << order;
+			o << "-> " << order << " ";
 			if (++counter % 4 == 0) o << endl;
 		}
 
@@ -205,6 +209,34 @@ namespace tmdlang
 				{
 					if (!strchr(ignores, c))
 					{
+						if (c == '/')
+						{
+							if (!GetChar()) UnexpectedFileEnding();
+							if (c != '*') Error("Wrong comment format.");
+
+							bool waitingCommentEnd = false;
+							while (GetChar())
+							{
+								if (c == '*')
+								{
+									waitingCommentEnd = true;
+								}
+								else if (c == '/')
+								{
+									if (waitingCommentEnd)
+									{
+										goto STOP_COMMENT;
+									}
+								}
+								else
+								{
+									waitingCommentEnd = false;
+								}
+							}
+							UnexpectedFileEnding();
+						STOP_COMMENT:
+							continue;
+						}
 						return true;
 					}
 				}
@@ -322,7 +354,7 @@ namespace tmdlang
 				{
 					cr.UnexpectedChar();
 				}
-				node.name = cr.c - '1';
+				node.name = cr.c - '0';
 
 				while (true)
 				{
