@@ -6,6 +6,9 @@ src_cpp/Test/**/*.db
 src_cpp/Test/**/*.opendb
 src_cpp/Test/**/*.vcxproj.user
 
+# src_cpp
+example/**/*.formatted.tmd
+
 # Byte-compiled / optimized / DLL files
 __pycache__/*
 *.py[cod]

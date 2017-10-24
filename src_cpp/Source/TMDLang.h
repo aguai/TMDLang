@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <memory>
 #include <string>
 #include <vector>
@@ -74,7 +75,7 @@ namespace tmdlang
 
 	struct Order
 	{
-		OrderType				orderType;
+		OrderType				type;
 		std::string				name;
 	};
 
@@ -88,5 +89,15 @@ namespace tmdlang
 		std::vector<Order>		orders;			// -> intro -> A -> {?+3} -> B ->#
 
 		virtual ~Sheet() = default;
+
+		void					Write(std::ostream& o);
 	};
+
+	extern std::ostream&		operator<<(std::ostream& o, const Beat& value);
+	extern std::ostream&		operator<<(std::ostream& o, const Node& value);
+	extern std::ostream&		operator<<(std::ostream& o, const Unit& value);
+	extern std::ostream&		operator<<(std::ostream& o, const Section& value);
+	extern std::ostream&		operator<<(std::ostream& o, const Paragraph& value);
+	extern std::ostream&		operator<<(std::ostream& o, const Order& value);
+	extern std::ostream&		operator<<(std::ostream& o, const Sheet& value);
 }
