@@ -1,9 +1,15 @@
 #include "TMDLang.h"
+#include <sstream>
+#include <algorithm>
 
 using namespace std;
 
 namespace tmdlang
 {
+	/********************************************************
+	Formatting
+	********************************************************/
+
 	std::ostream& operator<<(std::ostream& o, const Beat& value)
 	{
 		return o << '<' << value.count << '/' << value.node << '>';
@@ -114,5 +120,202 @@ namespace tmdlang
 		}
 
 		return o << "->#" << endl;
+	}
+
+	/********************************************************
+	Parser
+	********************************************************/
+	
+	string ltrim(string input, const char* ignores) {
+		string s = input;
+		s.erase(s.begin(), find_if(s.begin(), s.end(), [=](int ch) {
+			return strchr(ignores, ch) != nullptr;
+		}));
+		return s;
+	}
+
+	string rtrim(string input, const char* ignores) {
+		string s = input;
+		s.erase(find_if(s.rbegin(), s.rend(), [=](int ch) {
+			return strchr(ignores, ch) != nullptr;
+		}).base(), s.end());
+		return s;
+	}
+
+	struct CharReader
+	{
+		istream& i;
+		char c;
+		int row = 1;
+		int column = 0;
+
+		CharReader(istream& _i)
+			:i(_i)
+		{
+		}
+
+		bool GetChar()
+		{
+			if (i.eof()) return false;
+			c = (char)i.get();
+			if (c == '\n')
+			{
+				row++;
+				column = 0;
+			}
+			else
+			{
+				column++;
+			}
+			return true;
+		}
+
+		bool Get(const char* ignores = "\r\n\t ")
+		{
+			if (ignores)
+			{
+				while (GetChar())
+				{
+					if (!strchr(ignores, c))
+					{
+						return true;
+					}
+				}
+				return false;
+			}
+			else
+			{
+				return GetChar();
+			}
+		}
+
+		string Read(const char until = 0, const char* ignores = "\r\n\t ")
+		{
+			if (!Get(ignores)) UnexpectedFileEnding();
+			string result;
+			stringstream ss;
+			ss << c;
+			while (GetChar())
+			{
+				if (until)
+				{
+					if (c == until)
+					{
+						return rtrim(ss.str(), ignores);
+					}
+				}
+				else
+				{
+					if (strchr(ignores, c))
+					{
+						return ss.str();
+					}
+				}
+				ss << c;
+			}
+			UnexpectedFileEnding();
+		}
+
+		void Ensure(const char* text)
+		{
+			auto reading = text;
+			while (*reading++)
+			{
+				if (!Get()) UnexpectedFileEnding();
+				if (reading[-1] != c) Error("Expect \"" + string(text) + "\" here.");
+			}
+		}
+
+		void Error(string message)
+		{
+			stringstream ss;
+			ss << "row: " << row << ", column: " << column << " message: " << message;
+			throw ss.str();
+		}
+
+		void UnexpectedFileEnding()
+		{
+			Error("Unexpected file ending.");
+		}
+	};
+
+	void Sheet::Read(std::istream& i)
+	{
+		CharReader cr(i);
+		cr.Ensure("::SCORE::");
+
+		while (cr.Get())
+		{
+			switch (cr.c)
+			{
+			case '*':
+				cr.Ensure("*");
+				name = cr.Read('*');
+				cr.Ensure("*");
+				break;
+			case '!':
+				{
+					cr.Ensure("=");
+					stringstream(cr.Read()) >> speed;
+				}
+				break;
+			case '?':
+				{
+					cr.Ensure("=");
+					keySignature = cr.Read();
+				}
+				break;
+			case '<':
+				{
+					stringstream(cr.Read()) >> beat.count;
+					cr.Ensure("/");
+					stringstream(cr.Read()) >> beat.node;
+					cr.Ensure(">");
+				}
+				break;
+			case '-':
+				while(true)
+				{
+					cr.Ensure(">");
+					if (!cr.Get()) cr.UnexpectedFileEnding();
+					switch (cr.c)
+					{
+					case '#':
+						goto STOP_ORDER;
+					case '{':
+						{
+							cr.Ensure("?");
+							if (!cr.Get()) cr.UnexpectedFileEnding();
+							switch (cr.c)
+							{
+							case '=':
+								orders.push_back({ OrderType::Absolute,cr.Read('}') });
+								break;
+							default:
+								{
+									string name(1, cr.c);
+									name += cr.Read('}');
+									orders.push_back({ OrderType::Relative,name });
+								}
+								break;
+							}
+							cr.Ensure("-");
+						}
+						break;
+					default:
+						{
+							string name(1, cr.c);
+							name += cr.Read('-');
+							orders.push_back({ OrderType::Name,name });
+						}
+						break;
+					}
+				}
+				STOP_ORDER:
+				break;
+			default:
+				break;
+			}
+		}
 	}
 }

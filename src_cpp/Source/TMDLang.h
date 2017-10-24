@@ -81,16 +81,16 @@ namespace tmdlang
 
 	struct Sheet
 	{
-		std::string				name;			// ** name **
-		int						speed = 133;	// != speed
-		std::string				keySignature;	// ?= keySignature
-		Beat					beat;			// <4/4>
-		Paragraph::List			paragraphs;		//
-		std::vector<Order>		orders;			// -> intro -> A -> {?+3} -> B ->#
+		std::string				name;				// ** name **
+		double					speed = 120;		// != speed
+		std::string				keySignature = "C";	// ?= keySignature
+		Beat					beat;				// <4/4>
+		Paragraph::List			paragraphs;			//
+		std::vector<Order>		orders;				// -> intro -> A -> {?+3} -> B ->#
 
 		virtual ~Sheet() = default;
 
-		void					Write(std::ostream& o);
+		void					Read(std::istream& i);	// report error by throwing std::string
 	};
 
 	extern std::ostream&		operator<<(std::ostream& o, const Beat& value);
