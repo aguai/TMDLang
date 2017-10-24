@@ -2,7 +2,7 @@
 .DEFAULT_GOAL := all
 
 CPP_LINK=clang++ -std=c++14 -pthread -g $(CPP_COMPILE_OPTIONS) -o $@ $^
-CPP_COMPILE=clang++ -std=c++14 -g $(CPP_COMPILE_OPTIONS) -o $@ -c $<
+CPP_COMPILE=clang++ -std=c++14 -g $(CPP_COMPILE_OPTIONS) -D _DEBUG -o $@ -c $<
 
 pre-build:
 	if ! [ -d ./Debug ]; then mkdir ./Debug; fi
