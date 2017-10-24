@@ -47,7 +47,7 @@ namespace tmdlang
 
 	struct Section
 	{
-		using List = std::vector<std::shared_ptr<Section>>;
+		using List = std::vector<std::shared_ptr<Section> >;
 
 		int						nodeLength = 4;	// <nodeLength*>
 		std::vector<Unit>		units;
@@ -56,7 +56,7 @@ namespace tmdlang
 	// name:instrument@|start|{ ... }
 	struct Paragraph
 	{
-		using List = std::vector<std::shared_ptr<Paragraph>>;
+		using List = std::vector<std::shared_ptr<Paragraph> >;
 
 		std::string				name;
 		std::string				instrument;
