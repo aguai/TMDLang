@@ -14,7 +14,7 @@ a markup language for sequent event like **band style music score** or **show ru
 
 1. in order to use charactors like 🎝 , 𝆒 , 𝄋, 𝄌,etc. [FreeSerif](http://ftp.gnu.org/gnu/freefont/freefont-ttf-20120503.zip) and [Hanazono](http://fonts.jp/hanazono/) must be install separately.
 
-2. libcairo should be rebuild with these flags :
+2. ~~libcairo should be rebuild with these flags :~~
     ```
     ./configure --enable-quartz=no --enable-quartz-font=no --enable-quartz-image=no
     ```
