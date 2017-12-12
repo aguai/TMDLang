@@ -24,9 +24,9 @@ a markup language for sequent event like **band style music score** or **show ru
 
 1. 請自行安裝 [FreeSerif](http://ftp.gnu.org/gnu/freefont/freefont-ttf-20120503.zip) 及 [花園明朝](http://fonts.jp/hanazono/) 兩組字體以俾顯示 🎝 , 𝆒 , 𝄋, 𝄌 等字體。
 
-2. libcairo 需要以以下 flags 重新編譯:
-    ```
-    ./configure --enable-quartz=no --enable-quartz-font=no --enable-quartz-image=no
+2. ~~libcairo 需要以以下 flags 重新編譯:~~
+    ```bash
+    # ./configure --enable-quartz=no --enable-quartz-font=no --enable-quartz-image=no
     ```
     (bug has been fix and push into mainstream)
 
